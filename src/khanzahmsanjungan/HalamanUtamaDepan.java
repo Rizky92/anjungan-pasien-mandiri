@@ -125,7 +125,7 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(1280, 1024));
         jPanel1.setLayout(new java.awt.GridLayout(0, 2));
 
-        btnAdmin10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/antrianpasien.png"))); // NOI18N
+        btnAdmin10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_antrianpasien.png"))); // NOI18N
         btnAdmin10.setText("ANTRIAN PASIEN");
         btnAdmin10.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin10.setIconTextGap(0);
@@ -137,9 +137,8 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin10);
 
-        btnAdmin7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/checkin.png"))); // NOI18N
+        btnAdmin7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_checkin.png"))); // NOI18N
         btnAdmin7.setText("CEK IN REGISTRASI");
-        btnAdmin7.setEnabled(false);
         btnAdmin7.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin7.setIconTextGap(0);
         btnAdmin7.setPreferredSize(new java.awt.Dimension(200, 90));
@@ -150,9 +149,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin7);
 
-        btnAdmin2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/kioskselfservice.png"))); // NOI18N
+        btnAdmin2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_selfservice.png"))); // NOI18N
         btnAdmin2.setText("PENDAFTARAN POLIKLINIK");
-        btnAdmin2.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin2.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin2.setIconTextGap(0);
         btnAdmin2.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin2.addActionListener(new java.awt.event.ActionListener() {
@@ -162,9 +161,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin2);
 
-        btnAdmin5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/BPJS_Kesehatan_Logo.png"))); // NOI18N
+        btnAdmin5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_bpjs_kesehatan.png"))); // NOI18N
         btnAdmin5.setText("SEP KUNJUNGAN PERTAMA");
-        btnAdmin5.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin5.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin5.setIconTextGap(0);
         btnAdmin5.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin5.addActionListener(new java.awt.event.ActionListener() {
@@ -174,9 +173,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin5);
 
-        btnAdmin6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/BPJS_Kesehatan_Logo.png"))); // NOI18N
+        btnAdmin6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_bpjs_kesehatan.png"))); // NOI18N
         btnAdmin6.setText("SEP KONTROL");
-        btnAdmin6.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin6.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin6.setIconTextGap(0);
         btnAdmin6.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin6.addActionListener(new java.awt.event.ActionListener() {
@@ -186,9 +185,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin6);
 
-        btnAdmin9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/BPJS_Kesehatan_Logo.png"))); // NOI18N
+        btnAdmin9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_bpjs_kesehatan.png"))); // NOI18N
         btnAdmin9.setText("KONTROL BEDA POLI");
-        btnAdmin9.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin9.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin9.setIconTextGap(0);
         btnAdmin9.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin9.addActionListener(new java.awt.event.ActionListener() {
@@ -198,9 +197,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin9);
 
-        btnAdmin8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/mobilejkn48.png"))); // NOI18N
+        btnAdmin8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_mobilejkn.png"))); // NOI18N
         btnAdmin8.setText("CEK IN MOBILEJKN");
-        btnAdmin8.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin8.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin8.setIconTextGap(0);
         btnAdmin8.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin8.addActionListener(new java.awt.event.ActionListener() {
@@ -210,10 +209,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         });
         jPanel1.add(btnAdmin8);
 
-        btnAdmin11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/logo-satset.png"))); // NOI18N
+        btnAdmin11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/68px_satusehat.png"))); // NOI18N
         btnAdmin11.setText("AKTIVASI SATUSEHAT");
-        btnAdmin11.setEnabled(false);
-        btnAdmin11.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        btnAdmin11.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin11.setIconTextGap(0);
         btnAdmin11.setPreferredSize(new java.awt.Dimension(200, 90));
         btnAdmin11.addActionListener(new java.awt.event.ActionListener() {

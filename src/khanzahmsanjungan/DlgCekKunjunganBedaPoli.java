@@ -42,8 +42,7 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel2 = new javax.swing.JPanel();
@@ -71,16 +70,17 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         setModal(true);
         setUndecorated(true);
         setResizable(false);
-        getContentPane().setLayout(new java.awt.BorderLayout(1, 1));
+        getContentPane().setLayout(new java.awt.BorderLayout(1, 0));
 
         jPanel2.setBackground(new java.awt.Color(238, 238, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel2.setForeground(new java.awt.Color(238, 238, 255));
 
         PanelWall.setBackground(new java.awt.Color(238, 238, 255));
-        PanelWall.setBackgroundImage(new javax.swing.ImageIcon(getClass().getResource("/picture/bpjs-amiz.png"))); // NOI18N
+        PanelWall.setBackgroundImage(new javax.swing.ImageIcon(getClass().getResource("/picture/396px_bpjskesehatan.png"))); // NOI18N
         PanelWall.setBackgroundImageType(usu.widget.constan.BackgroundConstan.BACKGROUND_IMAGE_STRECT);
         PanelWall.setForeground(new java.awt.Color(238, 238, 255));
-        PanelWall.setPreferredSize(new java.awt.Dimension(500, 150));
+        PanelWall.setPreferredSize(new java.awt.Dimension(500, 77));
         PanelWall.setRound(false);
         PanelWall.setWarna(new java.awt.Color(238, 238, 255));
 
@@ -92,7 +92,7 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         );
         PanelWallLayout.setVerticalGroup(
             PanelWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addGap(0, 77, Short.MAX_VALUE)
         );
 
         jPanel2.add(PanelWall);
@@ -100,7 +100,7 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.setBackground(new java.awt.Color(238, 238, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 215, 255)), "::[ Cek Data Pasien!!! ]::", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Inter", 0, 30), new java.awt.Color(0, 131, 62))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel1.setForeground(new java.awt.Color(0, 131, 62));
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 70));
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -109,10 +109,8 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         NoRMPasien.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         NoRMPasien.setFont(new java.awt.Font("Inter", 0, 36)); // NOI18N
         NoRMPasien.setPreferredSize(new java.awt.Dimension(350, 75));
-        NoRMPasien.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        NoRMPasien.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 NoRMPasienKeyPressed(evt);
             }
         });
@@ -143,10 +141,8 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         BtnTutup.setMargin(new java.awt.Insets(0, 0, 0, 0));
         BtnTutup.setPreferredSize(new java.awt.Dimension(100, 75));
         BtnTutup.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        BtnTutup.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        BtnTutup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnTutupActionPerformed(evt);
             }
         });
@@ -165,10 +161,8 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
         BtnCek.setMargin(new java.awt.Insets(0, 0, 0, 0));
         BtnCek.setPreferredSize(new java.awt.Dimension(100, 75));
         BtnCek.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        BtnCek.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        BtnCek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnCekActionPerformed(evt);
             }
         });
@@ -182,120 +176,96 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
 
         btnAngka8.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka8.setText("8");
-        btnAngka8.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka8ActionPerformed(evt);
             }
         });
 
         btnAngka7.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka7.setText("7");
-        btnAngka7.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka7ActionPerformed(evt);
             }
         });
 
         btnAngka9.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka9.setText("9");
-        btnAngka9.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka9ActionPerformed(evt);
             }
         });
 
         btnAngka4.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka4.setText("4");
-        btnAngka4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka4ActionPerformed(evt);
             }
         });
 
         btnAngka5.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka5.setText("5");
-        btnAngka5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka5ActionPerformed(evt);
             }
         });
 
         btnAngka6.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka6.setText("6");
-        btnAngka6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka6ActionPerformed(evt);
             }
         });
 
         btnAngka2.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka2.setText("2");
-        btnAngka2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka2ActionPerformed(evt);
             }
         });
 
         btnAngka1.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka1.setText("1");
-        btnAngka1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka1ActionPerformed(evt);
             }
         });
 
         btnAngka3.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka3.setText("3");
-        btnAngka3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka3ActionPerformed(evt);
             }
         });
 
         btnAngka0.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnAngka0.setText("0");
-        btnAngka0.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngka0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngka0ActionPerformed(evt);
             }
         });
 
         btnAngkaHps.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 36)); // NOI18N
         btnAngkaHps.setText("<-");
-        btnAngkaHps.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAngkaHps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAngkaHpsActionPerformed(evt);
             }
         });
 
         btnClear.setFont(new java.awt.Font("Segoe UI SemiBold", 0, 48)); // NOI18N
         btnClear.setText("C");
-        btnClear.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
             }
         });
