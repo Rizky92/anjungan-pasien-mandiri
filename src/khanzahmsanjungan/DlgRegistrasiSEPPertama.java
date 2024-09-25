@@ -1647,7 +1647,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             isNumber();
 
             // cek apabila pasien sudah pernah diregistrasikan sebelumnya
-            if (Sequel.cariIntegerSmc("select count(*) from reg_periksa where no_rkm_medis = ? and tgl_registrasi = ? and kd_poli = ? and kd_dokter = ? and kd_pj = ?", TNoRM.getText(), Valid.setTglSmc(TanggalSEP), kodepolireg, kodedokterreg, Kdpnj.getText()) > 0) {
+            if (Sequel.cariIntegerSmc("select count(*) from reg_periksa where no_rkm_medis = ? and tgl_registrasi = ? and kd_poli = ? and kd_dokter = ? and kd_pj = ?", TNoRM.getText(), Valid.getTglSmc(TanggalSEP), kodepolireg, kodedokterreg, Kdpnj.getText()) > 0) {
                 JOptionPane.showMessageDialog(rootPane, "Maaf, Telah terdaftar pemeriksaan hari ini. Mohon konfirmasi ke Bagian Admisi");
                 emptTeks();
             } else {
@@ -1662,7 +1662,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                     insertSEP();
                 } else if (JenisPelayanan.getSelectedIndex() == 1) {
                     if (NmPoli.getText().toLowerCase().contains("darurat")) {
-                        if (Sequel.cariIntegerSmc("select count(*) from bridging_sep where no_kartu = ? and jnspelayanan = ? and tglsep = ? and nmpolitujuan like '%darurat%'", no_peserta, JenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.setTglSmc(TanggalSEP)) >= 3) {
+                        if (Sequel.cariIntegerSmc("select count(*) from bridging_sep where no_kartu = ? and jnspelayanan = ? and tglsep = ? and nmpolitujuan like '%darurat%'", no_peserta, JenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(TanggalSEP)) >= 3) {
                             JOptionPane.showMessageDialog(rootPane, "Maaf, sebelumnya sudah dilakukan 3x pembuatan SEP di jenis pelayanan yang sama..!!");
                         } else {
                             if ((!kodedokterreg.equals("")) && (!kodepolireg.equals(""))) {
@@ -1671,7 +1671,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                             insertSEP();
                         }
                     } else if (!NmPoli.getText().toLowerCase().contains("darurat")) {
-                        if (Sequel.cariIntegerSmc("select count(*) from bridging_sep where no_kartu = ? and jnspelayanan = ? and tglsep = ? and nmpolitujuan not like '%darurat%'", no_peserta, JenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.setTglSmc(TanggalSEP)) >= 1) {
+                        if (Sequel.cariIntegerSmc("select count(*) from bridging_sep where no_kartu = ? and jnspelayanan = ? and tglsep = ? and nmpolitujuan not like '%darurat%'", no_peserta, JenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(TanggalSEP)) >= 1) {
                             JOptionPane.showMessageDialog(rootPane, "Maaf, sebelumnya sudah dilakukan pembuatan SEP di jenis pelayanan yang sama..!!");
                         } else {
                             if ((!kodedokterreg.equals("")) && (!kodepolireg.equals(""))) {
@@ -2263,7 +2263,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 NoReg.setText(
                     Sequel.cariIsiSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and tgl_registrasi = ?",
-                        kodepolireg, Valid.setTglSmc(TanggalSEP)
+                        kodepolireg, Valid.getTglSmc(TanggalSEP)
                     )
                 );
                 break;
@@ -2271,7 +2271,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 NoReg.setText(
                     Sequel.cariIsiSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_dokter = ? and tgl_registrasi = ?",
-                        kodedokterreg, Valid.setTglSmc(TanggalSEP)
+                        kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
                 );
                 break;
@@ -2279,7 +2279,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 NoReg.setText(
                     Sequel.cariIsiSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
-                        kodepolireg, kodedokterreg, Valid.setTglSmc(TanggalSEP)
+                        kodepolireg, kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
                 );
                 break;
@@ -2287,7 +2287,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 NoReg.setText(
                     Sequel.cariIsiSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
-                        kodepolireg, kodedokterreg, Valid.setTglSmc(TanggalSEP)
+                        kodepolireg, kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
                 );
                 break;
@@ -2296,14 +2296,14 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         TNoRw.setText(
             Sequel.cariIsiSmc(
                 "select concat(date_format(tgl_registrasi, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(no_rawat, 6), signed)), 0) + 1, 6, '0')) from reg_periksa where tgl_registrasi = ?",
-                Valid.setTglSmc(TanggalSEP)
+                Valid.getTglSmc(TanggalSEP)
             )
         );
     }
 
     private void tentukanHari() {
         try {
-            java.sql.Date hariperiksa = java.sql.Date.valueOf(Valid.setTglSmc(TanggalSEP));
+            java.sql.Date hariperiksa = java.sql.Date.valueOf(Valid.getTglSmc(TanggalSEP));
             cal.setTime(hariperiksa);
             day = cal.get(Calendar.DAY_OF_WEEK);
             switch (day) {
@@ -2509,13 +2509,13 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 System.out.println("SEP berhasil terbit!");
                 System.out.println("No. SEP: " + response.asText());
 
-                String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.setTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
+                String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
 
                 if (isNoRawat == null || (!isNoRawat.equals(TNoRw.getText()))) {
                     System.out.println("======================================================");
                     System.out.println("Tidak dapat mendaftarkan pasien dengan detail berikut:");
                     System.out.println("No. Rawat: " + TNoRw.getText());
-                    System.out.println("Tgl. Registrasi: " + Valid.setTglSmc(TanggalSEP));
+                    System.out.println("Tgl. Registrasi: " + Valid.getTglSmc(TanggalSEP));
                     System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
                     System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
                     System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
@@ -2528,7 +2528,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 Sequel.menyimpanSmc("bridging_sep", null,
                     response.asText(),
                     TNoRw.getText(),
-                    Valid.setTglSmc(TanggalSEP),
+                    Valid.getTglSmc(TanggalSEP),
                     Valid.SetTgl(TanggalRujuk.getSelectedItem().toString()),
                     NoRujukan.getText(),
                     KdPpkRujukan.getText(),
@@ -2585,7 +2585,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 }
 
                 if (JenisPelayanan.getSelectedIndex() == 1) {
-                    Sequel.mengupdateSmc("bridging_sep", "tglpulang = ?", "no_sep = ?", Valid.setTglSmc(TanggalSEP), response.asText());
+                    Sequel.mengupdateSmc("bridging_sep", "tglpulang = ?", "no_sep = ?", Valid.getTglSmc(TanggalSEP), response.asText());
                 }
 
                 if (!prb.equals("")) {
@@ -2596,9 +2596,9 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
 
                 if (Sequel.cariIntegerSmc(
                     "select count(*) from booking_registrasi where no_rkm_medis = ? and tanggal_periksa = ? and kd_dokter = ? and kd_poli = ? and status != 'Terdaftar'",
-                    TNoRM.getText(), Valid.setTglSmc(TanggalSEP), kodedokterreg, kodepolireg
+                    TNoRM.getText(), Valid.getTglSmc(TanggalSEP), kodedokterreg, kodepolireg
                 ) == 1) {
-                    Sequel.mengupdateSmc("booking_registrasi", "status = 'Terdaftar', waktu_kunjungan = now()", "no_rkm_medis = ? and tanggal_periksa = ? and kd_dokter = ? and kd_poli = ?", TNoRM.getText(), Valid.setTglSmc(TanggalSEP), kodedokterreg, kodepolireg);
+                    Sequel.mengupdateSmc("booking_registrasi", "status = 'Terdaftar', waktu_kunjungan = now()", "no_rkm_medis = ? and tanggal_periksa = ? and kd_dokter = ? and kd_poli = ?", TNoRM.getText(), Valid.getTglSmc(TanggalSEP), kodedokterreg, kodepolireg);
                 }
 
                 cetakRegistrasi(response.asText());
@@ -2626,7 +2626,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 headers.add("X-Timestamp", utc);
                 headers.add("X-Signature", api.getHmac(utc));
                 headers.add("user_key", koneksiDB.USERKEYAPIBPJS());
-                URL = URLAPIBPJS + "/SEP/FingerPrint/Peserta/" + noka + "/TglPelayanan/" + Valid.setTglSmc(TanggalSEP);
+                URL = URLAPIBPJS + "/SEP/FingerPrint/Peserta/" + noka + "/TglPelayanan/" + Valid.getTglSmc(TanggalSEP);
                 requestEntity = new HttpEntity(headers);
                 root = mapper.readTree(api.getRest().exchange(URL, HttpMethod.GET, requestEntity, String.class).getBody());
                 nameNode = root.path("metaData");
@@ -3094,15 +3094,15 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             pskontrol.setString(1, noSKDP);
             try (ResultSet rskontrol = pskontrol.executeQuery()) {
                 if (rskontrol.next()) {
-                    if (!rskontrol.getString("tgl_rencana").equals(Valid.setTglSmc(TanggalSEP))) {
+                    if (!rskontrol.getString("tgl_rencana").equals(Valid.getTglSmc(TanggalSEP))) {
                         updateSuratKontrol(
-                            rskontrol.getString("no_surat"), rskontrol.getString("no_sep"), rskontrol.getString("no_kartu"), Valid.setTglSmc(TanggalSEP),
+                            rskontrol.getString("no_surat"), rskontrol.getString("no_sep"), rskontrol.getString("no_kartu"), Valid.getTglSmc(TanggalSEP),
                             rskontrol.getString("kd_dokter_bpjs"), rskontrol.getString("nm_dokter_bpjs"), rskontrol.getString("kd_poli_bpjs"), rskontrol.getString("nm_poli_bpjs")
                         );
                     }
                     if (rskontrol.getString("jnspelayanan").equals("1")) {
                         try {
-                            URL = URLAPIBPJS + "/Peserta/nokartu/" + rskontrol.getString("no_kartu") + "/tglSEP/" + Valid.setTglSmc(TanggalSEP);
+                            URL = URLAPIBPJS + "/Peserta/nokartu/" + rskontrol.getString("no_kartu") + "/tglSEP/" + Valid.getTglSmc(TanggalSEP);
                             utc = String.valueOf(api.GetUTCdatetimeAsString());
                             headers = new HttpHeaders();
                             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -3352,7 +3352,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         jammulai = rs.getString("jam_mulai");
                         jamselesai = rs.getString("jam_selesai");
                         kuota = rs.getInt("kuota");
-                        datajam = Sequel.cariIsiSmc("select date_add(concat(?, ' ', ?), interval ? minute)", Valid.setTglSmc(TanggalSEP), jammulai, String.valueOf(Integer.parseInt(NoReg.getText()) * 5));
+                        datajam = Sequel.cariIsiSmc("select date_add(concat(?, ' ', ?), interval ? minute)", Valid.getTglSmc(TanggalSEP), jammulai, String.valueOf(Integer.parseInt(NoReg.getText()) * 5));
                         parsedDate = dateFormat.parse(datajam);
                     } else {
                         System.out.println("Jadwal tidak ditemukan...!");
@@ -3753,7 +3753,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         System.out.println("Mencoba mendaftarkan pasien dengan no. rawat: " + TNoRw.getText());
 
         while (coba < maxCoba && (!Sequel.menyimpantfSmc("reg_periksa", null,
-            NoReg.getText(), TNoRw.getText(), Valid.setTglSmc(TanggalSEP),
+            NoReg.getText(), TNoRw.getText(), Valid.getTglSmc(TanggalSEP),
             Sequel.cariIsi("select current_time()"), kodedokterreg, TNoRM.getText(), kodepolireg,
             TPngJwb.getText(), TAlmt.getText(), THbngn.getText(), TBiaya.getText(), "Belum",
             statuspasien, "Ralan", Kdpnj.getText(), umur, sttsumur, "Belum Bayar", status))) {
@@ -3763,13 +3763,13 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             coba++;
         }
 
-        String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.setTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
+        String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
 
         if (coba == maxCoba && (isNoRawat == null || !isNoRawat.equals(TNoRw.getText()))) {
             System.out.println("======================================================");
             System.out.println("Tidak dapat mendaftarkan pasien dengan detail berikut:");
             System.out.println("No. Rawat: " + TNoRw.getText());
-            System.out.println("Tgl. Registrasi: " + Valid.setTglSmc(TanggalSEP));
+            System.out.println("Tgl. Registrasi: " + Valid.getTglSmc(TanggalSEP));
             System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
             System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
             System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
@@ -3790,7 +3790,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         NoRujukMasuk.setText(
             Sequel.cariIsiSmc(
                 "select concat('BR/', date_format(?, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
-                Valid.setTglSmc(TanggalSEP), Valid.setTglSmc(TanggalSEP)
+                Valid.getTglSmc(TanggalSEP), Valid.getTglSmc(TanggalSEP)
             )
         );
 
@@ -3803,7 +3803,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             NoRujukMasuk.setText(
                 Sequel.cariIsiSmc(
                     "select concat('BR/', date_format(?, '%Y/%m/%d/'), lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
-                    Valid.setTglSmc(TanggalSEP), Valid.setTglSmc(TanggalSEP)
+                    Valid.getTglSmc(TanggalSEP), Valid.getTglSmc(TanggalSEP)
                 )
             );
 
