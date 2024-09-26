@@ -2464,48 +2464,6 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
             System.out.println("Notif : " + e);
             JOptionPane.showMessageDialog(null, "Maaf, Data surat kontrol tidak ditemukan...!!!");
         }
-        
-        try (PreparedStatement ps = koneksi.prepareStatement(
-            "select maping_dokter_dpjpvclaim.kd_dokter, maping_dokter_dpjpvclaim.kd_dokter_bpjs, maping_dokter_dpjpvclaim.nm_dokter_bpjs " +
-            "from maping_dokter_dpjpvclaim join jadwal on maping_dokter_dpjpvclaim.kd_dokter = jadwal.kd_dokter " +
-            "where jadwal.kd_poli = ? and jadwal.hari_kerja = ?"
-        )) {
-            switch (cal.get(Calendar.DAY_OF_WEEK)) {
-                case 1:
-                    hari = "AKHAD";
-                    break;
-                case 2:
-                    hari = "SENIN";
-                    break;
-                case 3:
-                    hari = "SELASA";
-                    break;
-                case 4:
-                    hari = "RABU";
-                    break;
-                case 5:
-                    hari = "KAMIS";
-                    break;
-                case 6:
-                    hari = "JUMAT";
-                    break;
-                case 7:
-                    hari = "SABTU";
-                    break;
-                default:
-                    break;
-            }
-            ps.setString(1, kodePoliRS);
-            ps.setString(2, hari);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    kodeDokterBPJS.setText(rs.getString("kd_dokter_bpjs"));
-                    namaDokterBPJS.setText(rs.getString("nm_dokter_bpjs"));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Notif : " + e);
-        }
     }
 
     public void tampilKontrol2(String noSKDP) {
