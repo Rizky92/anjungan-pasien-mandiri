@@ -2466,8 +2466,28 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         }
     }
 
-    public void tampilKontrol2(String noSKDP) {
-
+    private void cekStatusPesertaBPJS() {
+        
+    }
+    
+    private void cekByPesertaRujukanPertama() {
+        
+    }
+    
+    private void cekByPesertaRujukanRS() {
+        
+    }
+    
+    private void cekRujukanPertama() {
+        
+    }
+    
+    private void cekRujukanRS() {
+        
+    }
+    
+    private void cekNoSuratKontrol() {
+        
     }
     
     private boolean addAntreanOnsite() {
