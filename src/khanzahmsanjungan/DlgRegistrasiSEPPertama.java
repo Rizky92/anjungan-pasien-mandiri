@@ -130,7 +130,6 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         jeniskunjungan = "",
         nomorreg = "",
         URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS(),
-        URLFINGERPRINTBPJS = koneksiDB.URLFINGERPRINTBPJS(),
         USERFINGERPRINTBPJS = koneksiDB.USERFINGERPRINTBPJS(),
         PASSFINGERPRINTBPJS = koneksiDB.PASSFINGERPRINTBPJS(),
         PRINTER_REGISTRASI = koneksiDB.PRINTER_REGISTRASI(),
@@ -295,7 +294,6 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         URUTNOREG = koneksiDB.URUTNOREG();
         BASENOREG = koneksiDB.BASENOREG();
         URLAPIBPJS = koneksiDB.URLAPIBPJS();
-        URLFINGERPRINTBPJS = koneksiDB.URLFINGERPRINTBPJS();
         USERFINGERPRINTBPJS = koneksiDB.USERFINGERPRINTBPJS();
         PASSFINGERPRINTBPJS = koneksiDB.PASSFINGERPRINTBPJS();
         URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS();

@@ -8,6 +8,7 @@ package fungsi;
 import AESsecurity.EnkripsiAES;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
 import javax.swing.JOptionPane;
@@ -35,35 +36,90 @@ public class koneksiDB {
                 dataSource.setPassword(EnkripsiAES.decrypt(prop.getProperty("PAS")));
                 connection = dataSource.getConnection();
                 System.out.println("  Koneksi Berhasil. Sorry bro loading, silahkan baca dulu.... \n\n"
-                        + "	Software ini adalah Software Menejemen Rumah Sakit/Klinik/\n"
-                        + "  Puskesmas yang  gratis dan boleh digunakan siapa saja tanpa dikenai \n"
-                        + "  biaya apapun. Dilarang keras memperjualbelikan/mengambil \n"
-                        + "  keuntungan dari Software ini dalam bentuk apapun tanpa seijin pembuat \n"
-                        + "  software (Khanza.Soft Media). Bagi yang sengaja memperjualbelikan/\n"
-                        + "  mengambil keuntangan dari softaware ini tanpa ijin, kami sumpahi sial \n"
-                        + "  1000 turunan, miskin sampai 500 turunan. Selalu mendapat kecelakaan \n"
-                        + "  sampai 400 turunan. Anak pertamanya cacat tidak punya kaki sampai 300 \n"
-                        + "  turunan. Susah cari jodoh sampai umur 50 tahun sampai 200 turunan.\n"
-                        + "  Ya Alloh maafkan kami karena telah berdoa buruk, semua ini kami lakukan\n"
-                        + "  karena kami tidak pernah rela karya kami dibajak tanpa ijin.\n\n"
-                        + "                                                                           \n"
-                        + "  #    ____  ___  __  __  ____   ____    _  __ _                              \n"
-                        + "  #   / ___||_ _||  \\/  ||  _ \\ / ___|  | |/ /| |__    __ _  _ __   ____ __ _ \n"
-                        + "  #   \\___ \\ | | | |\\/| || |_) |\\___ \\  | ' / | '_ \\  / _` || '_ \\ |_  // _` |\n"
-                        + "  #    ___) || | | |  | ||  _ <  ___) | | . \\ | | | || (_| || | | | / /| (_| |\n"
-                        + "  #   |____/|___||_|  |_||_| \\_\\|____/  |_|\\_\\|_| |_| \\__,_||_| |_|/___|\\__,_|\n"
-                        + "  #                                                                           \n"
-                        + "                                                                           \n"
-                        + "  Licensi yang dianut di software ini https://en.wikipedia.org/wiki/Aladdin_Free_Public_License \n"
-                        + "  Informasi dan panduan bisa dicek di halaman https://github.com/mas-elkhanza/SIMRS-Khanza/wiki \n"
-                        + "                                                                           ");
+                    + "	 Software ini adalah Software Menejemen Rumah Sakit/Klinik/\n"
+                    + "  Puskesmas yang gratis dan boleh digunakan siapa saja tanpa dikenai \n"
+                    + "  biaya apapun. Dilarang keras memperjualbelikan/mengambil \n"
+                    + "  keuntungan dari Software ini dalam bentuk apapun tanpa seijin pembuat \n"
+                    + "  software (Khanza.Soft Media). Bagi yang sengaja memperjualbelikan/\n"
+                    + "  mengambil keuntangan dari softaware ini tanpa ijin, kami sumpahi sial \n"
+                    + "  1000 turunan, miskin sampai 500 turunan. Selalu mendapat kecelakaan \n"
+                    + "  sampai 400 turunan. Anak pertamanya cacat tidak punya kaki sampai 300 \n"
+                    + "  turunan. Susah cari jodoh sampai umur 50 tahun sampai 200 turunan.\n"
+                    + "  Ya Alloh maafkan kami karena telah berdoa buruk, semua ini kami lakukan\n"
+                    + "  karena kami tidak pernah rela karya kami dibajak tanpa ijin.\n\n"
+                    + "                                                                           \n"
+                    + "  #    ____  ___  __  __  ____   ____    _  __ _                              \n"
+                    + "  #   / ___||_ _||  \\/  ||  _ \\ / ___|  | |/ /| |__    __ _  _ __   ____ __ _ \n"
+                    + "  #   \\___ \\ | | | |\\/| || |_) |\\___ \\  | ' / | '_ \\  / _` || '_ \\ |_  // _` |\n"
+                    + "  #    ___) || | | |  | ||  _ <  ___) | | . \\ | | | || (_| || | | | / /| (_| |\n"
+                    + "  #   |____/|___||_|  |_||_| \\_\\|____/  |_|\\_\\|_| |_| \\__,_||_| |_|/___|\\__,_|\n"
+                    + "  #                                                                           \n"
+                    + "                                                                           \n"
+                    + "  Licensi yang dianut di software ini https://en.wikipedia.org/wiki/Aladdin_Free_Public_License \n"
+                    + "  Informasi dan panduan bisa dicek di halaman https://github.com/mas-elkhanza/SIMRS-Khanza/wiki \n"
+                    + "                                                                           \n"
+                    + "  Versi APM : ");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Koneksi Putus : " + e);
             }
         }
         return connection;
     }
+
+    public static String raw(String propertyName) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return prop.getProperty(propertyName);
+        } catch (Exception e) {
+            return "";
+        }
+    }
     
+    public static String rawEnc(String propertyName) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return EnkripsiAES.decrypt(prop.getProperty(propertyName));
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    
+    public static boolean bRaw(String propertyName) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return prop.getProperty(propertyName).equalsIgnoreCase("yes");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public static boolean bRaw(String propertyName, boolean defaultValue) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return prop.getProperty(propertyName).equalsIgnoreCase("yes");
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+    
+    public static boolean bRawEnc(String propertyName) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return EnkripsiAES.decrypt(prop.getProperty(propertyName)).equalsIgnoreCase("yes");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public static boolean bRawEnc(String propertyName, boolean defaultValue) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return EnkripsiAES.decrypt(prop.getProperty(propertyName)).equalsIgnoreCase("yes");
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
     public static String PRINTER_REGISTRASI() {
         try {
             prop.loadFromXML(new FileInputStream("setting/apm.xml"));
@@ -72,7 +128,7 @@ public class koneksiDB {
             return "";
         }
     }
-    
+
     public static String PRINTER_BARCODE() {
         try {
             prop.loadFromXML(new FileInputStream("setting/apm.xml"));
@@ -81,22 +137,13 @@ public class koneksiDB {
             return "";
         }
     }
-    
+
     public static int PRINTJUMLAHBARCODE() {
         try {
             prop.loadFromXML(new FileInputStream("setting/apm.xml"));
             return Integer.parseInt(prop.getProperty("PRINTJUMLAHBARCODE", "3"));
         } catch (Exception e) {
             return 3;
-        }
-    }
-    
-    public static String URLFINGERPRINTBPJS() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return prop.getProperty("URLFINGERPRINTBPJS");
-        } catch (Exception e) {
-            return "";
         }
     }
 
@@ -122,6 +169,133 @@ public class koneksiDB {
         try {
             prop.loadFromXML(new FileInputStream("setting/apm.xml"));
             return EnkripsiAES.decrypt(prop.getProperty("PASSWORDFINGERPRINTBPJS"));
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSAPIURL() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("ADAMLABSAPIURL");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSAPIKEY() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return EnkripsiAES.decrypt(prop.getProperty("ADAMLABSAPIKEY"));
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSAPIKODERS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("ADAMLABSAPIKODERS");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSKECAMATANID() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("ADAMLABSKECAMATANID");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSKABUPATENID() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("ADAMLABSKABUPATENID");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String ADAMLABSPROVINSIID() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("ADAMLABSPROVINSIID");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String LABORATORIUMKIRIMHASIL() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("LABORATORIUMKIRIMHASIL");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String LABORATORIUMURUTANHASIL() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("LABORATORIUMURUTANHASIL");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static boolean GUNAKANDIAGNOSAEKLAIM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("GUNAKANDIAGNOSAEKLAIM").equalsIgnoreCase("yes");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean VALIDASIULANGPINDAHKAMAR() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("VALIDASIULANGPINDAHKAMAR").toLowerCase().trim().equals("yes");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean VALIDASIULANGHASILPERMINTAAN(String kategori) {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("VALIDASIULANGHASILPERMINTAAN").toLowerCase().trim().contains(kategori);
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public static boolean VALIDASIRESEPKRONIS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            return prop.getProperty("VALIDASIRESEPKRONIS").toLowerCase().trim().equals("yes");
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public static String TAMPILANDEFAULTRIWAYATPASIEN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            String value = prop.getProperty("TAMPILANDEFAULTRIWAYATPASIEN").toLowerCase().trim();
+            switch (value) {
+                case "2 riwayat terakhir":
+                case "5 riwayat terakhir":
+                case "semua riwayat":
+                case "per tanggal":
+                case "norawat":
+                    return value;
+                default:
+                    return "";
+            }
         } catch (Exception e) {
             return "";
         }
@@ -181,6 +355,26 @@ public class koneksiDB {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
             var = EnkripsiAES.decrypt(prop.getProperty("HOSTHYBRIDWEB"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERHYBRIDWEB() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERHYBRIDWEB"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PASHYBRIDWEB() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PASHYBRIDWEB"));
         } catch (Exception e) {
             var = "";
         }
@@ -287,6 +481,36 @@ public class koneksiDB {
         return var;
     }
 
+    public static String ALARMBOOKINGPERIKSA() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("ALARMBOOKINGPERIKSA");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String ALARMPERMINTAANRANAP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("ALARMPERMINTAANRANAP");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String ALARMPENGADUANPASIEN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("ALARMPENGADUANPASIEN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
     public static String MENUTRANSPARAN() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
@@ -307,30 +531,10 @@ public class koneksiDB {
         return var;
     }
 
-    public static String URLAPIMOBILEJKN() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = prop.getProperty("URLAPIMOBILEJKN");
-        } catch (Exception e) {
-            var = "";
-        }
-        return var;
-    }
-
     public static String SECRETKEYAPIBPJS() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
             var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIBPJS"));
-        } catch (Exception e) {
-            var = "";
-        }
-        return var;
-    }
-
-    public static String USERKEYAPIBPJS() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIBPJS"));
         } catch (Exception e) {
             var = "";
         }
@@ -347,30 +551,10 @@ public class koneksiDB {
         return var;
     }
 
-    public static String SECRETKEYAPIMOBILEJKN() {
+    public static String USERKEYAPIBPJS() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIMOBILEJKN"));
-        } catch (Exception e) {
-            var = "";
-        }
-        return var;
-    }
-
-    public static String USERKEYAPIMOBILEJKN() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIMOBILEJKN"));
-        } catch (Exception e) {
-            var = "";
-        }
-        return var;
-    }
-
-    public static String CONSIDAPIMOBILEJKN() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIMOBILEJKN"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIBPJS"));
         } catch (Exception e) {
             var = "";
         }
@@ -407,6 +591,106 @@ public class koneksiDB {
         return var;
     }
 
+    public static String USERKEYAPIAPLICARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIAPLICARE"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPIMOBILEJKN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPIMOBILEJKN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYAPIMOBILEJKN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIMOBILEJKN"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDAPIMOBILEJKN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIMOBILEJKN"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYAPIMOBILEJKN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIMOBILEJKN"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPIAPOTEKBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPIAPOTEKBPJS");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYAPIAPOTEKBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIAPOTEKBPJS"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDAPIAPOTEKBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIAPOTEKBPJS"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYAPIAPOTEKBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIAPOTEKBPJS"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String JADIKANPIUTANGAPOTEKBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("JADIKANPIUTANGAPOTEKBPJS"));
+        } catch (Exception e) {
+            var = "no";
+        }
+        return var;
+    }
+
     public static String URLAPIPCARE() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
@@ -431,6 +715,16 @@ public class koneksiDB {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
             var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIPCARE"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYAPIPCARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIPCARE"));
         } catch (Exception e) {
             var = "";
         }
@@ -537,6 +831,36 @@ public class koneksiDB {
         return var;
     }
 
+    public static String URLAPICORONA() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPICORONA");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String IDCORONA() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("IDCORONA"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PASSCORONA() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PASSCORONA"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
     public static String URLAPISITT() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
@@ -580,7 +904,7 @@ public class koneksiDB {
     public static String KAMARAKTIFRANAP() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = prop.getProperty("KAMARAKTIFRANAP");
+            var = prop.getProperty("KAMARAKTIFRANAP").replaceAll("'", "");;
         } catch (Exception e) {
             var = "";
         }
@@ -590,7 +914,7 @@ public class koneksiDB {
     public static String DOKTERAKTIFKASIRRALAN() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = prop.getProperty("DOKTERAKTIFKASIRRALAN");
+            var = prop.getProperty("DOKTERAKTIFKASIRRALAN").replaceAll("'", "");;
         } catch (Exception e) {
             var = "";
         }
@@ -600,7 +924,7 @@ public class koneksiDB {
     public static String POLIAKTIFKASIRRALAN() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = prop.getProperty("POLIAKTIFKASIRRALAN");
+            var = prop.getProperty("POLIAKTIFKASIRRALAN").replaceAll("'", "");;
         } catch (Exception e) {
             var = "";
         }
@@ -610,7 +934,7 @@ public class koneksiDB {
     public static String RUANGANAKTIFINVENTARIS() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            var = prop.getProperty("RUANGANAKTIFINVENTARIS");
+            var = prop.getProperty("RUANGANAKTIFINVENTARIS").replaceAll("'", "");;
         } catch (Exception e) {
             var = "";
         }
@@ -621,6 +945,16 @@ public class koneksiDB {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
             var = prop.getProperty("BASENOREG");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String VALIDASIULANGBERIOBAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("VALIDASIULANGBERIOBAT");
         } catch (Exception e) {
             var = "";
         }
@@ -810,11 +1144,11 @@ public class koneksiDB {
     public static String AKTIFKANTRACKSQL() {
         try {
             prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            
-            return EnkripsiAES.decrypt(prop.getProperty("AKTIFKANTRACKSQL"));
+            var = EnkripsiAES.decrypt(prop.getProperty("AKTIFKANTRACKSQL"));
         } catch (Exception e) {
-            return "";
+            var = "";
         }
+        return var;
     }
 
     public static String HOSTWSLICA() {
@@ -837,4 +1171,681 @@ public class koneksiDB {
         return var;
     }
 
+    public static String DEPOAKTIFOBAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("DEPOAKTIFOBAT").replaceAll("'", "");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String STOKKOSONGRESEP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("STOKKOSONGRESEP");
+        } catch (Exception e) {
+            var = "no";
+        }
+        return var;
+    }
+
+    public static String HPPFARMASI() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            if (prop.getProperty("HPPFARMASI").equals("h_beli")) {
+                var = "h_beli";
+            } else {
+                var = "dasar";
+            }
+        } catch (Exception e) {
+            var = "dasar";
+        }
+        return var;
+    }
+
+    public static String HPPTOKO() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            if (prop.getProperty("HPPTOKO").equals("h_beli")) {
+                var = "h_beli";
+            } else {
+                var = "dasar";
+            }
+        } catch (Exception e) {
+            var = "dasar";
+        }
+        return var;
+    }
+
+    public static String URLAPIMEDQLAB() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPIMEDQLAB");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYAPIMEDQLAB() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIMEDQLAB"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDAPIMEDQLAB() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIMEDQLAB"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLCARESTREAM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLCARESTREAM");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPISOFTMEDIX() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPISOFTMEDIX");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PRODUCTSOFTMEDIX() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PRODUCTSOFTMEDIX"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String VERSIONSOFTMEDIX() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("VERSIONSOFTMEDIX"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERIDSOFTMEDIX() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERIDSOFTMEDIX"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KEYSOFTMEDIX() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("KEYSOFTMEDIX"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String RESEPRAJALKEPLAN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("RESEPRAJALKEPLAN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String DIAGNOSARUJUKANMASUKAPIBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("DIAGNOSARUJUKANMASUKAPIBPJS");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String AKTIFKANWARNARALAN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("AKTIFKANWARNARALAN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CLIENTIDSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CLIENTIDSATUSEHAT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYSATUSEHAT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String IDSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("IDSATUSEHAT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAUTHSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAUTHSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLFHIRSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLFHIRSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KELURAHANSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("KELURAHANSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KECAMATANSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("KECAMATANSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KABUPATENSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("KABUPATENSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PROPINSISATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("PROPINSISATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KODEPOSSATUSEHAT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("KODEPOSSATUSEHAT");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERORTHANC() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERORTHANC"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PASSORTHANC() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PASSORTHANC"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PORTORTHANC() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PORTORTHANC"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLORTHANC() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLORTHANC");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String ADDANTRIANAPIMOBILEJKN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("ADDANTRIANAPIMOBILEJKN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String JADIKANBOOKINGSURATKONTROLAPIBPJS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("JADIKANBOOKINGSURATKONTROLAPIBPJS");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPIICARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPIICARE");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYAPIICARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPIICARE"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDAPIICARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPIICARE"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYAPIICARE() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPIICARE"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPISMARTCLAIM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPISMARTCLAIM");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYAPISMARTCLAIM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYAPISMARTCLAIM"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDAPISMARTCLAIM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDAPISMARTCLAIM"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYAPISMARTCLAIM() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYAPISMARTCLAIM"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String TANGGALMUNDUR() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("TANGGALMUNDUR");
+        } catch (Exception e) {
+            var = "yes";
+        }
+        return var;
+    }
+
+    public static String URLMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLMOBILEJKNFKTP");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SECRETKEYMOBILEJKNFKTP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String CONSIDMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("CONSIDMOBILEJKNFKTP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERKEYMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERKEYMOBILEJKNFKTP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PASSMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PASSMOBILEJKNFKTP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERMOBILEJKNFKTP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPATHPEMBAYARANPIHAKKETIGA() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPATHPEMBAYARANPIHAKKETIGA"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPATHPEMBAYARANPAJAK() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPATHPEMBAYARANPAJAK"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPATHPEMBAYARANVIRTUALACCOUNT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPATHPEMBAYARANVIRTUALACCOUNT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPATHACK() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPATHACK"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPATHMT940() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPATHMT940"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIHOST() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIHOST"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPORT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPORT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIUSER() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIUSER"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPMANDIRIPAS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPMANDIRIPAS"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String KUNCIDOKTERRANAP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("KUNCIDOKTERRANAP"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String ADDANTRIANAPIMOBILEJKNFKTP() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("ADDANTRIANAPIMOBILEJKNFKTP");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAPIESIGN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAPIESIGN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String USERNAMEAPIESIGN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("USERNAMEAPIESIGN"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String PASSAPIESIGN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("PASSAPIESIGN"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPFILEESIGNHOST() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPFILEESIGNHOST"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPFILEESIGNPORT() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPFILEESIGNPORT"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPFILEESIGNUSER() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPFILEESIGNUSER"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPFILEESIGNPAS() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPFILEESIGNPAS"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String SFTPFILEESIGNFOLDER() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = EnkripsiAES.decrypt(prop.getProperty("SFTPFILEESIGNFOLDER"));
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
+
+    public static String URLAKSESFILEESIGN() {
+        try {
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var = prop.getProperty("URLAKSESFILEESIGN");
+        } catch (Exception e) {
+            var = "";
+        }
+        return var;
+    }
 }
