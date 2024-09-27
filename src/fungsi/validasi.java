@@ -9,9 +9,7 @@ import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.awt.print.PrinterJob;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,12 +30,10 @@ import javax.print.PrintServiceLookup;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
-import javax.print.attribute.standard.MediaPrintableArea;
-import javax.print.attribute.standard.MediaSize;
-import javax.print.attribute.standard.MediaSizeName;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -49,33 +45,32 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
-import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
 import uz.ncipro.calendar.JDateTimePicker;
+import widget.Button;
+import widget.ComboBox;
 import widget.Tanggal;
+import widget.TextArea;
+import widget.TextBox;
 
 /**
  *
  * @author Owner
  */
 public final class validasi {
-
     private int a, j, i, result = 0;
-
     private String s, s1, auto, PEMBULATANHARGAOBAT = koneksiDB.PEMBULATANHARGAOBAT();
-    private final Connection connect = koneksiDB.condb();
-    private final sekuel sek = new sekuel();
+    private final Connection koneksi = koneksiDB.condb();
+    private final sekuel Sequel = new sekuel();
     private final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
     private final DecimalFormat df2 = new DecimalFormat("###,###,###,###,###,###,###");
     private final DecimalFormat df4 = new DecimalFormat("###,###,###,###,###,###,###.#################");
@@ -85,82 +80,150 @@ public final class validasi {
     private final DecimalFormat df7 = new DecimalFormat("######.#");
     private PreparedStatement ps;
     private ResultSet rs;
+    private File file;
+    private boolean status = true;
     private final Calendar now = Calendar.getInstance();
     private final int year = (now.get(Calendar.YEAR));
-    private static final Properties prop = new Properties();
+    private String[] nomina = {"", "satu", "dua", "tiga", "empat", "lima", "enam",
+        "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"};
 
     public validasi() {
         super();
     }
-    
+
+    public void autoNomorSmc(JTextField component, String prefix, String table, String kolom, int panjang, String pad, String tanggal) {
+        component.setText(Sequel.autoNomorSmc(prefix, table, kolom, panjang, pad, tanggal));
+    }
+
+    public void autoNomorSmc(JTextField component, String prefix, String table, String kolom, int panjang, String pad, Tanggal tgl) {
+        autoNomorSmc(component, prefix, table, kolom, panjang, pad, getTglSmc(tgl));
+    }
+
+    public void autoNomorSmc(JTextField component, String prefix, String table, String kolom, int panjang, String pad, Object item) {
+        autoNomorSmc(component, prefix, table, kolom, panjang, pad, SetTgl(item.toString()));
+    }
+
     public String getTglSmc(Tanggal tgl) {
         return new SimpleDateFormat("yyyy-MM-dd").format(tgl.getDate());
     }
-    
+
+    public String getWaktuSmc(ComboBox jam, ComboBox menit, ComboBox detik) {
+        return jam.getSelectedItem() + ":" + menit.getSelectedItem() + ":" + detik.getSelectedItem();
+    }
+
+    public String getTglJamSmc(Tanggal tgl, ComboBox jam, ComboBox menit, ComboBox detik) {
+        return getTglSmc(tgl) + " " + getWaktuSmc(jam, menit, detik);
+    }
+
+    public String getTglJamSmc(Tanggal tgljam) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(tgljam.getDate());
+    }
+
+    public String setTglJamSmc(Date tgljam) {
+        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(tgljam);
+    }
+
+    public void reportTempSmc(String reportName, String reportDirName, String judul, Map reportParams) {
+        reportSmc(reportName, reportDirName, judul, reportParams, "select * from temporary where temp37 = ?", akses.getalamatip());
+    }
+
+    public void reportSmc(String reportName, String reportDirName, String judul, Map reportParams, String sql, String... values) {
+        try (PreparedStatement ps = koneksi.prepareStatement(sql)) {
+            for (int i = 0; i < values.length; i++) {
+                ps.setString(i + 1, values[i]);
+            }
+            JasperViewer jasperViewer = new JasperViewer(JasperFillManager.fillReport("./" + reportDirName + "/" + reportName, reportParams, new JRResultSetDataSource(ps.executeQuery())), false);
+            jasperViewer.setTitle(judul);
+            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+            jasperViewer.setSize(screen.width - 50, screen.height - 50);
+            jasperViewer.setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
+            jasperViewer.setLocationRelativeTo(null);
+            jasperViewer.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Notif : " + e);
+            JOptionPane.showMessageDialog(null, "Report can't view because : " + e);
+        }
+    }
+
+    public void reportSmc(String reportName, String reportDirName, String judul, Map reportParams) {
+        try {
+            JasperViewer jv = new JasperViewer(JasperFillManager.fillReport("./" + reportDirName + "/" + reportName, reportParams, koneksi), false);
+            jv.setTitle(judul);
+            Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+            jv.setSize(screen.width - 50, screen.height - 50);
+            jv.setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
+            jv.setLocationRelativeTo(null);
+            jv.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Notif : " + e);
+            JOptionPane.showMessageDialog(null, "Report can't view because : " + e);
+        }
+    }
+
     public void printReport(String namaReport, String namaPrinter, String judul, int jumlah, Map params) {
         String currentDir = System.getProperties().getProperty("user.dir");
 
         File dir = new File(currentDir);
         File report = null;
-        
+
         if (dir.isDirectory()) {
-            for (String file: dir.list()) {
+            for (String file : dir.list()) {
                 report = new File(currentDir + File.separatorChar + file + File.separatorChar + namaReport);
-                
+
                 if (report.isFile()) {
                     System.out.println("Found report file at: " + report.toString());
                     break;
                 }
             }
         }
-        
+
         if (report == null) {
             JOptionPane.showMessageDialog(null, "File tidak ditemukan!");
             return;
         }
-        
+
         try {
             JasperReport jr = (JasperReport) JRLoader.loadObject(report);
-            JasperPrint jp = JasperFillManager.fillReport(jr, params, connect);
-            
+            JasperPrint jp = JasperFillManager.fillReport(jr, params, koneksi);
+
             PrintService printService = null;
-            
-            for (PrintService currentPrintService: PrintServiceLookup.lookupPrintServices(null, null)) {
+
+            for (PrintService currentPrintService : PrintServiceLookup.lookupPrintServices(null, null)) {
                 if (currentPrintService.getName().equals(namaPrinter)) {
                     System.out.println("Printer ditemukan: " + currentPrintService.getName());
                     printService = currentPrintService;
                     break;
                 }
             }
-            
+
             if (printService == null) {
                 JOptionPane.showMessageDialog(null, "Printer tidak ditemukan!");
                 return;
             }
-            
+
             PrintRequestAttributeSet pra = new HashPrintRequestAttributeSet();
             pra.add(new Copies(jumlah));
-            
+
             SimplePrintServiceExporterConfiguration config = new SimplePrintServiceExporterConfiguration();
-            
+
             config.setPrintService(printService);
             config.setPrintRequestAttributeSet(pra);
             config.setPrintServiceAttributeSet(printService.getAttributes());
             config.setDisplayPageDialog(false);
             config.setDisplayPrintDialog(false);
-            
+
             JRPrintServiceExporter exporter = new JRPrintServiceExporter();
-            
+
             exporter.setExporterInput(new SimpleExporterInput(jp));
             exporter.setConfiguration(config);
             exporter.exportReport();
         } catch (Exception e) {
             System.out.println(e);
-            
-            for (StackTraceElement ste: e.getStackTrace()) {
+
+            for (StackTraceElement ste : e.getStackTrace()) {
                 System.out.println(ste);
             }
-            
+
             JOptionPane.showMessageDialog(null, "Tidak bisa menampilkan hasil cetak!");
         }
     }
@@ -177,7 +240,7 @@ public final class validasi {
 
     public void autoNomer(String tabel, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement("select * from " + tabel);
+            ps = koneksi.prepareStatement("select * from " + tabel);
             try {
                 rs = ps.executeQuery();
                 rs.last();
@@ -206,7 +269,7 @@ public final class validasi {
 
     public void autoNomer2(String sql, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 rs.last();
@@ -235,7 +298,7 @@ public final class validasi {
 
     public void autoNomer3(String sql, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 s = "1";
@@ -268,7 +331,7 @@ public final class validasi {
 
     public void autoNomer4(String sql, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 s = "1";
@@ -301,7 +364,7 @@ public final class validasi {
 
     public void autoNomer5(String sql, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 s = "1";
@@ -334,7 +397,7 @@ public final class validasi {
 
     public void autoNomer6(String sql, String strAwal, Integer pnj, javax.swing.JTextField teks) {
         try {
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 s = "1";
@@ -368,7 +431,7 @@ public final class validasi {
     public String autoNomer(String tabel, String strAwal, Integer pnj) {
         try {
             auto = "";
-            ps = connect.prepareStatement("select * from " + tabel);
+            ps = koneksi.prepareStatement("select * from " + tabel);
             try {
                 rs = ps.executeQuery();
                 rs.last();
@@ -401,7 +464,7 @@ public final class validasi {
     public String autoNomer3(String sql, String strAwal, Integer pnj) {
         try {
             auto = "";
-            ps = connect.prepareStatement(sql);
+            ps = koneksi.prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 s = "1";
@@ -441,15 +504,30 @@ public final class validasi {
         } else if (nilai_field.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
         } else if (!nilai_field.getText().trim().equals("")) {
-            sek.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
+            Sequel.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
         }
+    }
+
+    public boolean editTabletf(DefaultTableModel tabMode, String table, String field_acuan, JTextField nilai_field, String update) {
+        status = true;
+        if (tabMode.getRowCount() == 0) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, data sudah habis...!!!!");
+            nilai_field.requestFocus();
+        } else if (nilai_field.getText().trim().equals("")) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
+        } else if (!nilai_field.getText().trim().equals("")) {
+            status = Sequel.mengedittf(table, field_acuan + "='" + nilai_field.getText() + "'", update);
+        }
+        return status;
     }
 
     public void editTable(String table, String field_acuan, JTextField nilai_field, String update) {
         if (nilai_field.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
         } else if (!nilai_field.getText().trim().equals("")) {
-            sek.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
+            Sequel.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
         }
     }
 
@@ -459,8 +537,22 @@ public final class validasi {
         } else if (nilai_field.trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
         } else if (!nilai_field.trim().equals("")) {
-            sek.mengedit(table, field_acuan + "=" + nilai_field, update, i, a);
+            Sequel.mengedit(table, field_acuan + "=" + nilai_field, update, i, a);
         }
+    }
+
+    public boolean editTabletf(DefaultTableModel tabMode, String table, String field_acuan, String nilai_field, String update, int i, String[] a) {
+        status = true;
+        if (tabMode.getRowCount() == 0) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, data sudah habis...!!!!");
+        } else if (nilai_field.trim().equals("")) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
+        } else if (!nilai_field.trim().equals("")) {
+            status = Sequel.mengedittf(table, field_acuan + "=" + nilai_field, update, i, a);
+        }
+        return status;
     }
 
     public void editTable(DefaultTableModel tabMode, String table, String field_acuan, JComboBox nilai_field, String update) {
@@ -470,7 +562,7 @@ public final class validasi {
         } else if (nilai_field.getSelectedItem().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
         } else if (nilai_field.getSelectedItem() != "") {
-            sek.mengedit(table, field_acuan + "='" + nilai_field.getSelectedItem() + "'", update);
+            Sequel.mengedit(table, field_acuan + "='" + nilai_field.getSelectedItem() + "'", update);
 
         }
     }
@@ -482,7 +574,7 @@ public final class validasi {
         } else if (nilai_field.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal mengedit. Pilih dulu data yang mau diedit.\nKlik data pada table untuk memilih...!!!!");
         } else if (!nilai_field.getText().trim().equals("")) {
-            sek.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
+            Sequel.mengedit(table, field_acuan + "='" + nilai_field.getText() + "'", update);
 
         }
     }
@@ -500,7 +592,7 @@ public final class validasi {
             for (i = 0; i < model.getRowCount(); i++) {
                 for (j = 0; j < model.getColumnCount(); j++) {
                     Label row = new Label(j, i + 1,
-                            model.getValueAt(i, j).toString());
+                        model.getValueAt(i, j).toString());
                     sheet1.addCell(row);
                 }
             }
@@ -518,9 +610,23 @@ public final class validasi {
         } else if (nilai_field.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal menghapus. Pilih dulu data yang mau dihapus.\nKlik data pada table untuk memilih...!!!!");
         } else if (!nilai_field.getText().trim().equals("")) {
-            sek.meghapus(table, field, nilai_field.getText());
-
+            Sequel.meghapus(table, field, nilai_field.getText());
         }
+    }
+
+    public boolean hapusTabletf(DefaultTableModel tabMode, JTextField nilai_field, String table, String field) {
+        status = true;
+        if (tabMode.getRowCount() == 0) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, data sudah habis...!!!!");
+            nilai_field.requestFocus();
+        } else if (nilai_field.getText().trim().equals("")) {
+            status = false;
+            JOptionPane.showMessageDialog(null, "Maaf, Gagal menghapus. Pilih dulu data yang mau dihapus.\nKlik data pada table untuk memilih...!!!!");
+        } else if (!nilai_field.getText().trim().equals("")) {
+            status = Sequel.meghapustf(table, field, nilai_field.getText());
+        }
+        return status;
     }
 
     public void hapusTable(DefaultTableModel tabMode, JComboBox nilai_field, String table, String field) {
@@ -531,14 +637,65 @@ public final class validasi {
             JOptionPane.showMessageDialog(null, "Maaf, Gagal menghapus. Pilih dulu data yang mau dihapus.\nKlik data pada table untuk memilih...!!!!");
         } else if (nilai_field.getSelectedItem() != "") {
             String data = nilai_field.getSelectedItem().toString();
-            sek.meghapus(table, field, data);
+            Sequel.meghapus(table, field, data);
         }
     }
 
     public void loadCombo(JComboBox cmb, String field, String table) {
         cmb.removeAllItems();
         try {
-            ps = connect.prepareStatement("select " + field + " from " + table + " order by " + field);
+            ps = koneksi.prepareStatement("select " + field + " from " + table + " order by " + field);
+            try {
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String item = rs.getString(1);
+                    cmb.addItem(item);
+                    a++;
+                }
+            } catch (Exception e) {
+                System.out.println("Notifikasi : " + e);
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (ps != null) {
+                    ps.close();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi : " + e);
+        }
+    }
+
+    public int hariAkhad(int month, int year) {
+        j = 0;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, 1);
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        for (i = 1; i <= days; i++) {
+            calendar.set(year, month - 1, i);
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (day == 1) {
+                j++;
+            }
+        }
+
+        return j;
+    }
+
+    public int jumlahHari(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, 1);
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        return days;
+    }
+
+    public void loadCombo(JComboBox cmb, String query) {
+        cmb.removeAllItems();
+        try {
+            ps = koneksi.prepareStatement(query);
             try {
                 rs = ps.executeQuery();
                 while (rs.next()) {
@@ -602,11 +759,11 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = koneksi.createStatement()) {
                 try {
 
                     String namafile = "./" + reportDirName + "/" + reportName;
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, koneksi);
 
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
                     jasperViewer.setTitle(judul);
@@ -648,11 +805,11 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = koneksi.createStatement()) {
                 try {
                     File f = new File("./" + reportDirName + "/" + reportName.replaceAll("jasper", "pdf"));
                     String namafile = "./" + reportDirName + "/" + reportName;
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, koneksi);
                     JasperExportManager.exportReportToPdfFile(jasperPrint, "./" + reportDirName + "/" + reportName.replaceAll("jasper", "pdf"));
                     Desktop.getDesktop().open(f);
                 } catch (Exception rptexcpt) {
@@ -688,11 +845,11 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = koneksi.createStatement()) {
                 try {
 
                     String namafile = "./" + reportDirName + "/" + reportName;
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, koneksi);
 
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
                     jasperViewer.setTitle(judul);
@@ -733,8 +890,7 @@ public final class validasi {
         } // end if
 
         try {
-            System.out.println("masuk sini");
-            ps = connect.prepareStatement(qry);
+            ps = koneksi.prepareStatement(qry);
             try {
                 String namafile = "./" + reportDirName + "/" + reportName;
                 rs = ps.executeQuery();
@@ -951,7 +1107,7 @@ public final class validasi {
         } // end if
 
         try {
-            ps = connect.prepareStatement(qry);
+            ps = koneksi.prepareStatement(qry);
             try {
                 String namafile = "./" + reportDirName + "/" + reportName;
                 File f = new File("./" + reportDirName + "/" + reportName.replaceAll("jasper", "pdf"));
@@ -978,7 +1134,7 @@ public final class validasi {
 
     public void MyReport(String reportName, Map parameters, String title) {
         try {
-            JasperViewer jasperViewer = new JasperViewer(JasperFillManager.fillReport("./report/" + reportName, parameters, connect), false);
+            JasperViewer jasperViewer = new JasperViewer(JasperFillManager.fillReport("./report/" + reportName, parameters, koneksi), false);
             jasperViewer.setTitle(title);
             jasperViewer.setLocationRelativeTo(null);
             jasperViewer.setVisible(true);
@@ -1053,7 +1209,39 @@ public final class validasi {
     }
 
     public void pindah2(java.awt.event.KeyEvent evt, JTextField kiri, JTextField kanan) {
-        if (evt.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JTextField kiri, JTextArea kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JTextArea kiri, JTextArea kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JTextArea kiri, JTextField kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JTextArea kiri, JButton kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
             kanan.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
             kiri.requestFocus();
@@ -1061,7 +1249,95 @@ public final class validasi {
     }
 
     public void pindah2(java.awt.event.KeyEvent evt, JTextField kiri, JComboBox kanan) {
-        if (evt.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JComboBox kiri, JComboBox kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JComboBox kiri, JTextField kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JComboBox kiri, JTextArea kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JButton kiri, JTextArea kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, TextArea kiri, ComboBox kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, Tanggal kiri, Button kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, Button kiri, ComboBox kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(java.awt.event.KeyEvent evt, JTextField kiri, JButton kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, ComboBox kiri, Button kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, TextArea kiri, Tanggal kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah2(KeyEvent evt, Button kiri, TextBox kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
             kanan.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
             kiri.requestFocus();
@@ -1110,14 +1386,6 @@ public final class validasi {
         }
     }
 
-    public void pindah2(java.awt.event.KeyEvent evt, JTextField kiri, JButton kanan) {
-        if (evt.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
-            kanan.requestFocus();
-        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
-            kiri.requestFocus();
-        }
-    }
-
     public void pindah(java.awt.event.KeyEvent evt, JButton kiri, JTextField kanan) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             kanan.requestFocus();
@@ -1127,6 +1395,14 @@ public final class validasi {
     }
 
     public void pindah(java.awt.event.KeyEvent evt, JButton kiri, JButton kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah(java.awt.event.KeyEvent evt, JButton kiri, JCheckBox kanan) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             kanan.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
@@ -1167,6 +1443,14 @@ public final class validasi {
     }
 
     public void pindah(java.awt.event.KeyEvent evt, JCheckBox kiri, JDateTimePicker kanan) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            kanan.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+            kiri.requestFocus();
+        }
+    }
+
+    public void pindah(KeyEvent evt, Button kiri, TextArea kanan) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             kanan.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_PAGE_UP) {
@@ -1226,20 +1510,18 @@ public final class validasi {
         String os = System.getProperty("os.name").toLowerCase();
         Runtime rt = Runtime.getRuntime();
         try {
-            Properties prop = new Properties();
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
             if (os.contains("win")) {
-                rt.exec("rundll32 url.dll,FileProtocolHandler " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + prop.getProperty("PORTWEB") + "/" + prop.getProperty("HYBRIDWEB") + "/" + url);
+                rt.exec("rundll32 url.dll,FileProtocolHandler " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + koneksiDB.HYBRIDWEB() + "/" + url);
             } else if (os.contains("mac")) {
-                rt.exec("open " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + prop.getProperty("PORTWEB") + "/" + prop.getProperty("HYBRIDWEB") + "/" + url);
+                rt.exec("open " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + koneksiDB.HYBRIDWEB() + "/" + url);
             } else if (os.contains("nix") || os.contains("nux")) {
                 String[] browsers = {"x-www-browser", "epiphany", "firefox", "mozilla", "konqueror", "chrome", "chromium", "netscape", "opera", "links", "lynx", "midori"};
                 // Build a command string which looks like "browser1 "url" || browser2 "url" ||..."
                 StringBuilder cmd = new StringBuilder();
                 for (i = 0; i < browsers.length; i++) {
-                    cmd.append(i == 0 ? "" : " || ").append(browsers[i]).append(" \"").append("http://").append(koneksiDB.HOSTHYBRIDWEB() + ":" + prop.getProperty("PORTWEB")).append("/").append(prop.getProperty("HYBRIDWEB")).append("/").append(url).append("\" ");
+                    cmd.append(i == 0 ? "" : " || ").append(browsers[i]).append(" \"").append("http://").append(koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB()).append("/").append(koneksiDB.HYBRIDWEB()).append("/").append(url).append("\" ");
                 }
-                rt.exec(new String[]{"sh", "-c", cmd.toString()});
+                rt.exec(new String[] {"sh", "-c", cmd.toString()});
             }
         } catch (Exception e) {
             System.out.println("Notif Browser : " + e);
@@ -1250,8 +1532,6 @@ public final class validasi {
         String os = System.getProperty("os.name").toLowerCase();
         Runtime rt = Runtime.getRuntime();
         try {
-            Properties prop = new Properties();
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
             if (os.contains("win")) {
                 rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
             } else if (os.contains("mac")) {
@@ -1263,7 +1543,7 @@ public final class validasi {
                 for (i = 0; i < browsers.length; i++) {
                     cmd.append(i == 0 ? "" : " || ").append(browsers[i]).append(" \"").append(url).append("\" ");
                 }
-                rt.exec(new String[]{"sh", "-c", cmd.toString()});
+                rt.exec(new String[] {"sh", "-c", cmd.toString()});
             }
         } catch (Exception e) {
             System.out.println("Notif Browser : " + e);
@@ -1272,9 +1552,7 @@ public final class validasi {
 
     public void printUrl(String url) throws URISyntaxException {
         try {
-            Properties prop = new Properties();
-            prop.loadFromXML(new FileInputStream("setting/database.xml"));
-            desktop.print(new File(new java.net.URI("http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + prop.getProperty("PORTWEB") + "/" + url)));
+            desktop.print(new File(new java.net.URI("http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + url)));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -1283,7 +1561,7 @@ public final class validasi {
     public void SetTgl(DefaultTableModel tabMode, JTable table, JDateTimePicker dtp, int i) {
         j = table.getSelectedRow();
         try {
-            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tabMode.getValueAt(j, i).toString());
+            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tabMode.getValueAt(j, i).toString().replaceAll("'", ""));
             dtp.setDate(dtpa);
         } catch (ParseException ex) {
             dtp.setDate(new Date());
@@ -1291,6 +1569,7 @@ public final class validasi {
     }
 
     public String SetTgl(String original) {
+        original = original.replaceAll("'", "");
         s = "";
         try {
             s = original.substring(6, 10) + "-" + original.substring(3, 5) + "-" + original.substring(0, 2);
@@ -1299,7 +1578,36 @@ public final class validasi {
         return s;
     }
 
+    public String SetTglJam(String original, String pattern) {
+        original = original.replaceAll("'", "");
+        String out = "";
+
+        SimpleDateFormat dfIn = new SimpleDateFormat(pattern);
+        SimpleDateFormat dfOut = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            Date date = dfIn.parse(original);
+
+            out = dfOut.format(date);
+        } catch (ParseException ex) {
+            System.out.println("Notif : " + ex);
+        }
+
+        return out;
+    }
+
+    public String SetTglJam(String original) {
+        original = original.replaceAll("'", "");
+        s = "";
+        try {
+            s = original.substring(6, 10) + "-" + original.substring(3, 5) + "-" + original.substring(0, 2) + " " + original.substring(11, 19);
+        } catch (Exception e) {
+        }
+        return s;
+    }
+
     public String SetTgl3(String original) {
+        original = original.replaceAll("'", "");
         s = "";
         try {
             s = original.substring(8, 10) + "-" + original.substring(5, 7) + "-" + original.substring(0, 4);
@@ -1319,7 +1627,7 @@ public final class validasi {
 
     public void SetTgl(JDateTimePicker dtp, String tgl) {
         try {
-            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tgl);
+            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tgl.replaceAll("'", ""));
             dtp.setDate(dtpa);
         } catch (ParseException ex) {
             dtp.setDate(new Date());
@@ -1328,7 +1636,7 @@ public final class validasi {
 
     public void SetTgl2(JDateTimePicker dtp, String tgl) {
         try {
-            Date dtpa = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tgl);
+            Date dtpa = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tgl.replaceAll("'", ""));
             dtp.setDate(dtpa);
         } catch (ParseException ex) {
             dtp.setDate(new Date());
@@ -1337,11 +1645,21 @@ public final class validasi {
 
     public Date SetTgl2(String tgl) {
         try {
-            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tgl);
+            Date dtpa = new SimpleDateFormat("yyyy-MM-dd").parse(tgl.replaceAll("'", ""));
             return dtpa;
         } catch (ParseException ex) {
             return new Date();
         }
+    }
+
+    public String SetTgl4(String original) {
+        original = original.replaceAll("'", "");
+        s = "";
+        try {
+            s = original.substring(6, 10) + original.substring(3, 5) + original.substring(0, 2);
+        } catch (Exception e) {
+        }
+        return s;
     }
 
     public void textKosong(JTextField teks, String pesan) {
@@ -1418,6 +1736,33 @@ public final class validasi {
         return x;
     }
 
+    public double setAngkaSmc(String value) {
+        if (value.isBlank()) {
+            return 0;
+        }
+
+        try {
+            return Double.parseDouble(value);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int SetInteger(String txt) {
+        int x;
+        try {
+            if (txt.equals("")) {
+                x = 0;
+            } else {
+                x = Integer.parseInt(txt);
+            }
+        } catch (Exception e) {
+            x = 0;
+        }
+
+        return x;
+    }
+
     public double roundUp(double number, int multiple) {
         if (PEMBULATANHARGAOBAT.equals("yes")) {
             result = multiple;
@@ -1435,17 +1780,54 @@ public final class validasi {
         }
     }
 
-    public boolean ValidasiRegistrasi(String kodepoli, String kodedokter, String norm, String tglperiksa, String kodepj) {
-        try {
-            if (sek.cariInteger("select count(reg_periksa.no_rm) from reg_periksa where reg_periksa.kd_poli='" + kodepoli + "' and reg_periksa.kd_dokter='" + kodedokter + "' and reg_periksa.no_rkm_medis='" + norm + "' and reg_periksa.tgl_registrasi='" + tglperiksa + "' reg_periksa.kd_pj='" + kodepj + "'") > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            System.out.println("Notifikasi : " + e);
-            return false;
+    public String terbilang(double angka) {
+        if (angka < 12) {
+            return nomina[(int) angka];
         }
+
+        if (angka >= 12 && angka <= 19) {
+            return nomina[(int) angka % 10] + " belas ";
+        }
+
+        if (angka >= 20 && angka <= 99) {
+            return nomina[(int) angka / 10] + " puluh " + nomina[(int) angka % 10];
+        }
+
+        if (angka >= 100 && angka <= 199) {
+            return "seratus " + terbilang(angka % 100);
+        }
+
+        if (angka >= 200 && angka <= 999) {
+            return nomina[(int) angka / 100] + " ratus " + terbilang(angka % 100);
+        }
+
+        if (angka >= 1_000 && angka <= 1_999) {
+            return "seribu " + terbilang(angka % 1_000);
+        }
+
+        if (angka >= 2_000 && angka <= 999_999) {
+            return terbilang((int) angka / 1_000) + " ribu " + terbilang(angka % 1_000);
+        }
+
+        if (angka >= 1_000_000 && angka <= 999_999_999) {
+            return terbilang((int) angka / 1000000) + " juta " + terbilang(angka % 1000000);
+        }
+
+        return "";
     }
 
+    public int daysOld(String path) {
+        file = new File(path);
+        if (file.lastModified() < 1) {
+            return 0;
+        }
+        return milliToDay(Calendar.getInstance().getTimeInMillis() - file.lastModified());
+    }
+
+    /**
+     * Converts milliseconds to days
+     */
+    public static int milliToDay(long milli) {
+        return (int) ((double) milli / (1000 * 24 * 60 * 60));
+    }
 }

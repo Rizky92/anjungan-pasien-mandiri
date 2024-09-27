@@ -546,9 +546,9 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
     {
         if (Sequel.cariIntegerSmc("select count(*) from reg_periksa where no_rkm_medis = ? and kd_poli = ?", labelNoRM.getText(), regKodePoli) > 0) {
             regStatusPoli = "Lama";
-            regBiaya = Sequel.cariIsiSmc("select registrasilama from poliklinik where kd_poli = ? and status = '1'", regKodePoli);
+            regBiaya = Sequel.cariStringSmc("select registrasilama from poliklinik where kd_poli = ? and status = '1'", regKodePoli);
         } else {
-            regBiaya = Sequel.cariIsiSmc("select registrasi from poliklinik where kd_poli = ? and status = '1'", regKodePoli);
+            regBiaya = Sequel.cariStringSmc("select registrasi from poliklinik where kd_poli = ? and status = '1'", regKodePoli);
         }
         
         try {
@@ -615,32 +615,32 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
     private void setNomorRegistrasi() {
         switch (URUTNOREG) {
             case "poli":
-                regNoUrut = Sequel.cariIsiSmc(
+                regNoUrut = Sequel.cariStringSmc(
                     "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and tgl_registrasi = ?",
                     regKodePoli, Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString())
                 );
             break;
             case "dokter":
-                regNoUrut = Sequel.cariIsiSmc(
+                regNoUrut = Sequel.cariStringSmc(
                     "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_dokter = ? and tgl_registrasi = ?",
                     regKodePoli, Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString())
                 );
             break;
             case "dokter + poli":
-                regNoUrut = Sequel.cariIsiSmc(
+                regNoUrut = Sequel.cariStringSmc(
                     "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
                     regKodePoli, regKodeDokter, Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString())
                 );
             break;
             default:
-                regNoUrut = Sequel.cariIsiSmc(
+                regNoUrut = Sequel.cariStringSmc(
                     "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
                     regKodePoli, regKodeDokter, Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString())
                 );
             break;
         }
         
-        regNoRawat = Sequel.cariIsiSmc(
+        regNoRawat = Sequel.cariStringSmc(
             "select concat(date_format(?, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(no_rawat, 6), signed)), 0) + 1, 6, '0')) from reg_periksa where tgl_registrasi = ?",
             Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString()), Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString())
         );
@@ -700,17 +700,17 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
             coba++;
         }
         
-        String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString()), labelNoRM.getText(), regKodePoli, regKodeDokter);
+        String isNoRawat = Sequel.cariStringSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString()), labelNoRM.getText(), regKodePoli, regKodeDokter);
                 
         if (coba == maxCoba && (isNoRawat == null || ! isNoRawat.equals(regNoRawat))) {
             System.out.println("======================================================");
             System.out.println("Tidak dapat mendaftarkan pasien dengan detail berikut:");
             System.out.println("No. Rawat: " + regNoRawat);
             System.out.println("Tgl. Registrasi: " + Valid.SetTgl(dateTanggalPeriksa.getSelectedItem().toString()));
-            System.out.println("No. Antrian: " + regNoUrut + " (Ditemukan: " + Sequel.cariIsiSmc("select no_reg from reg_periksa where no_rawat = ?", regNoRawat) + ")");
-            System.out.println("No. RM: " + labelNoRM + " (Ditemukan: " + Sequel.cariIsiSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", regNoRawat) + ")");
-            System.out.println("Kode Dokter: " + regKodeDokter + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_dokter from reg_periksa where no_rawat = ?", regNoRawat) + ")");
-            System.out.println("Kode Poli: " + regKodePoli  + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_poli from reg_periksa where no_rawat = ?", regNoRawat) + ")");
+            System.out.println("No. Antrian: " + regNoUrut + " (Ditemukan: " + Sequel.cariStringSmc("select no_reg from reg_periksa where no_rawat = ?", regNoRawat) + ")");
+            System.out.println("No. RM: " + labelNoRM + " (Ditemukan: " + Sequel.cariStringSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", regNoRawat) + ")");
+            System.out.println("Kode Dokter: " + regKodeDokter + " (Ditemukan: " + Sequel.cariStringSmc("select kd_dokter from reg_periksa where no_rawat = ?", regNoRawat) + ")");
+            System.out.println("Kode Poli: " + regKodePoli  + " (Ditemukan: " + Sequel.cariStringSmc("select kd_poli from reg_periksa where no_rawat = ?", regNoRawat) + ")");
             System.out.println("======================================================");
 
             return false;

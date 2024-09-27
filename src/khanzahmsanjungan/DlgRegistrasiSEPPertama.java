@@ -2259,7 +2259,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         switch (URUTNOREG) {
             case "poli":
                 NoReg.setText(
-                    Sequel.cariIsiSmc(
+                    Sequel.cariStringSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and tgl_registrasi = ?",
                         kodepolireg, Valid.getTglSmc(TanggalSEP)
                     )
@@ -2267,7 +2267,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 break;
             case "dokter":
                 NoReg.setText(
-                    Sequel.cariIsiSmc(
+                    Sequel.cariStringSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_dokter = ? and tgl_registrasi = ?",
                         kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
@@ -2275,7 +2275,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 break;
             case "dokter + poli":
                 NoReg.setText(
-                    Sequel.cariIsiSmc(
+                    Sequel.cariStringSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
                         kodepolireg, kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
@@ -2283,7 +2283,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 break;
             default:
                 NoReg.setText(
-                    Sequel.cariIsiSmc(
+                    Sequel.cariStringSmc(
                         "select lpad(ifnull(max(convert(no_reg, signed)), 0) + 1, 3, '0') from reg_periksa where kd_poli = ? and kd_dokter = ? and tgl_registrasi = ?",
                         kodepolireg, kodedokterreg, Valid.getTglSmc(TanggalSEP)
                     )
@@ -2292,7 +2292,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         }
 
         TNoRw.setText(
-            Sequel.cariIsiSmc(
+            Sequel.cariStringSmc(
                 "select concat(date_format(tgl_registrasi, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(no_rawat, 6), signed)), 0) + 1, 6, '0')) from reg_periksa where tgl_registrasi = ?",
                 Valid.getTglSmc(TanggalSEP)
             )
@@ -2507,17 +2507,17 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 System.out.println("SEP berhasil terbit!");
                 System.out.println("No. SEP: " + response.asText());
 
-                String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
+                String isNoRawat = Sequel.cariStringSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
 
                 if (isNoRawat == null || (!isNoRawat.equals(TNoRw.getText()))) {
                     System.out.println("======================================================");
                     System.out.println("Tidak dapat mendaftarkan pasien dengan detail berikut:");
                     System.out.println("No. Rawat: " + TNoRw.getText());
                     System.out.println("Tgl. Registrasi: " + Valid.getTglSmc(TanggalSEP));
-                    System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-                    System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-                    System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-                    System.out.println("Kode Poli: " + kodepolireg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_poli from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+                    System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariStringSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+                    System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariStringSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+                    System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariStringSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+                    System.out.println("Kode Poli: " + kodepolireg + " (Ditemukan: " + Sequel.cariStringSmc("select kd_poli from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
                     System.out.println("======================================================");
 
                     return;
@@ -2704,10 +2704,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 peserta = response.path("peserta").path("jenisPeserta").path("keterangan").asText();
                 TPasien.setText(response.path("peserta").path("nama").asText());
                 NoKartu.setText(response.path("peserta").path("noKartu").asText());
-                TNoRM.setText(Sequel.cariIsiSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
+                TNoRM.setText(Sequel.cariStringSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
                 NIK.setText(response.path("peserta").path("nik").asText());
                 if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                    NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                    NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                 }
                 JK.setText(response.path("peserta").path("sex").asText());
                 Status.setText(response.path("peserta").path("statusPeserta").path("kode").asText() + " " + response.path("peserta").path("statusPeserta").path("keterangan").asText());
@@ -2715,9 +2715,9 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 KdPoli.setText(response.path("poliRujukan").path("kode").asText());
                 NmPoli.setText(response.path("poliRujukan").path("nama").asText());
                 JenisPeserta.setText(response.path("peserta").path("jenisPeserta").path("keterangan").asText());
-                kdpoli.setText(Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText()));
-                kodepolireg = Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText());
-                kodedokterreg = Sequel.cariIsiSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
+                kdpoli.setText(Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText()));
+                kodepolireg = Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText());
+                kodedokterreg = Sequel.cariStringSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
                 isPoli();
                 KdPpkRujukan.setText(response.path("provPerujuk").path("kode").asText());
                 NmPpkRujukan.setText(response.path("provPerujuk").path("nama").asText());
@@ -2728,7 +2728,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 Catatan.setText("Anjungan Pasien Mandiri RS Samarinda Medika Citra");
                 NoTelp.setText(response.path("peserta").path("mr").path("noTelepon").asText());
                 if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                    NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                    NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                 }
             } else {
                 System.out.println("Pesan pencarian rujukan FKTP : " + nameNode.path("message").asText());
@@ -2769,10 +2769,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         peserta = response.path("peserta").path("jenisPeserta").path("keterangan").asText();
                         TPasien.setText(response.path("peserta").path("nama").asText());
                         NoKartu.setText(response.path("peserta").path("noKartu").asText());
-                        TNoRM.setText(Sequel.cariIsiSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
+                        TNoRM.setText(Sequel.cariStringSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
                         NIK.setText(response.path("peserta").path("nik").asText());
                         if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                            NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                            NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                         }
                         JK.setText(response.path("peserta").path("sex").asText());
                         Status.setText(response.path("peserta").path("statusPeserta").path("kode").asText() + " " + response.path("peserta").path("statusPeserta").path("keterangan").asText());
@@ -2785,7 +2785,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         kodedokterreg = Sequel.cariIsi("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs=?", KdDPJP.getText());
                         NoTelp.setText(response.path("peserta").path("mr").path("noTelepon").asText());
                         if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                            NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                            NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                         }
                         KdPpkRujukan.setText(response.path("provPerujuk").path("kode").asText());
                         NmPpkRujukan.setText(response.path("provPerujuk").path("nama").asText());
@@ -2915,10 +2915,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 peserta = response.path("peserta").path("jenisPeserta").path("keterangan").asText();
                 TPasien.setText(response.path("peserta").path("nama").asText());
                 NoKartu.setText(response.path("peserta").path("noKartu").asText());
-                TNoRM.setText(Sequel.cariIsiSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
+                TNoRM.setText(Sequel.cariStringSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
                 NIK.setText(response.path("peserta").path("nik").asText());
                 if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                    NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                    NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                 }
                 JK.setText(response.path("peserta").path("sex").asText());
                 Status.setText(response.path("peserta").path("statusPeserta").path("kode").asText() + " " + response.path("peserta").path("statusPeserta").path("keterangan").asText());
@@ -2926,9 +2926,9 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 KdPoli.setText(response.path("poliRujukan").path("kode").asText());
                 NmPoli.setText(response.path("poliRujukan").path("nama").asText());
                 JenisPeserta.setText(response.path("peserta").path("jenisPeserta").path("keterangan").asText());
-                kdpoli.setText(Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText()));
-                kodepolireg = Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText());
-                kodedokterreg = Sequel.cariIsiSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
+                kdpoli.setText(Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText()));
+                kodepolireg = Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", response.path("poliRujukan").path("kode").asText());
+                kodedokterreg = Sequel.cariStringSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
                 isPoli();
                 KdPpkRujukan.setText(response.path("provPerujuk").path("kode").asText());
                 NmPpkRujukan.setText(response.path("provPerujuk").path("nama").asText());
@@ -2939,7 +2939,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 Catatan.setText("Anjungan Pasien Mandiri RS Samarinda Medika Citra");
                 NoTelp.setText(response.path("peserta").path("mr").path("noTelepon").asText());
                 if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                    NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                    NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                 }
             } else {
                 System.out.println("Pesan pencarian rujukan FKTP : " + nameNode.path("message").asText());
@@ -2979,10 +2979,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         peserta = response.path("peserta").path("jenisPeserta").path("keterangan").asText();
                         TPasien.setText(response.path("peserta").path("nama").asText());
                         NoKartu.setText(response.path("peserta").path("noKartu").asText());
-                        TNoRM.setText(Sequel.cariIsiSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
+                        TNoRM.setText(Sequel.cariStringSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
                         NIK.setText(response.path("peserta").path("nik").asText());
                         if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                            NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                            NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                         }
                         JK.setText(response.path("peserta").path("sex").asText());
                         Status.setText(response.path("peserta").path("statusPeserta").path("kode").asText() + " " + response.path("peserta").path("statusPeserta").path("keterangan").asText());
@@ -2990,12 +2990,12 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         KdPoli.setText(response.path("poliRujukan").path("kode").asText());
                         NmPoli.setText(response.path("poliRujukan").path("nama").asText());
                         JenisPeserta.setText(response.path("peserta").path("jenisPeserta").path("keterangan").asText());
-                        kdpoli.setText(Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs=?", response.path("poliRujukan").path("kode").asText()));
-                        kodepolireg = Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs=?", response.path("poliRujukan").path("kode").asText());
-                        kodedokterreg = Sequel.cariIsiSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs=?", KdDPJP.getText());
+                        kdpoli.setText(Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs=?", response.path("poliRujukan").path("kode").asText()));
+                        kodepolireg = Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs=?", response.path("poliRujukan").path("kode").asText());
+                        kodedokterreg = Sequel.cariStringSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs=?", KdDPJP.getText());
                         NoTelp.setText(response.path("peserta").path("mr").path("noTelepon").asText());
                         if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                            NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                            NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                         }
                         KdPpkRujukan.setText(response.path("provPerujuk").path("kode").asText());
                         NmPpkRujukan.setText(response.path("provPerujuk").path("nama").asText());
@@ -3129,9 +3129,9 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                                 NmDPJP.setText(rskontrol.getString("nm_dokter_bpjs"));
                                 KdDPJPLayanan.setText(KdDPJP.getText());
                                 NmDPJPLayanan.setText(NmDPJP.getText());
-                                kdpoli.setText(Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText()));
-                                kodepolireg = Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText());
-                                kodedokterreg = Sequel.cariIsiSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
+                                kdpoli.setText(Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText()));
+                                kodepolireg = Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText());
+                                kodedokterreg = Sequel.cariStringSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
                                 NoSKDP.setText(rskontrol.getString("no_surat"));
                                 switch (rskontrol.getString("klsrawat")) {
                                     case "1":
@@ -3153,24 +3153,24 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                                 peserta = response.path("jenisPeserta").path("keterangan").asText();
                                 TPasien.setText(response.path("nama").asText());
                                 NoKartu.setText(response.path("noKartu").asText());
-                                TNoRM.setText(Sequel.cariIsiSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
+                                TNoRM.setText(Sequel.cariStringSmc("select no_rkm_medis from pasien where no_peserta = ?", NoKartu.getText()));
                                 NIK.setText(response.path("nik").asText());
                                 if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                                    NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                                    NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                                 }
                                 JK.setText(response.path("sex").asText());
                                 Status.setText(response.path("statusPeserta").path("kode").asText() + " " + response.path("statusPeserta").path("keterangan").asText());
                                 TglLahir.setText(response.path("tglLahir").asText());
                                 JenisPeserta.setText(response.path("jenisPeserta").path("keterangan").asText());
-                                KdPpkRujukan.setText(Sequel.cariIsiSmc("select kode_ppk from setting"));
-                                NmPpkRujukan.setText(Sequel.cariIsiSmc("select nama_instansi from setting"));
+                                KdPpkRujukan.setText(Sequel.cariStringSmc("select kode_ppk from setting"));
+                                NmPpkRujukan.setText(Sequel.cariStringSmc("select nama_instansi from setting"));
                                 isNumber();
                                 Kdpnj.setText("BPJ");
                                 nmpnj.setText("BPJS");
                                 Catatan.setText("Anjungan Pasien Mandiri RS Samarinda Medika Citra");
                                 NoTelp.setText(response.path("mr").path("noTelepon").asText());
                                 if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                                    NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                                    NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                                 }
                             } else {
                                 emptTeks();
@@ -3211,11 +3211,11 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                                 NmPoli.setText(rskontrol.getString("nm_poli_bpjs"));
                                 KdDPJP.setText(rskontrol.getString("kd_dokter_bpjs"));
                                 NmDPJP.setText(rskontrol.getString("nm_dokter_bpjs"));
-                                kdpoli.setText(Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText()));
+                                kdpoli.setText(Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText()));
                                 KdDPJPLayanan.setText(KdDPJP.getText());
                                 NmDPJPLayanan.setText(NmDPJP.getText());
-                                kodepolireg = Sequel.cariIsiSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText());
-                                kodedokterreg = Sequel.cariIsiSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
+                                kodepolireg = Sequel.cariStringSmc("select kd_poli_rs from maping_poli_bpjs where kd_poli_bpjs = ?", KdPoli.getText());
+                                kodedokterreg = Sequel.cariStringSmc("select kd_dokter from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", KdDPJP.getText());
                                 TujuanKunjungan.setSelectedIndex(2);
                                 FlagProsedur.setSelectedIndex(0);
                                 Penunjang.setSelectedIndex(0);
@@ -3245,10 +3245,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                                 peserta = response.path("peserta").path("jenisPeserta").path("keterangan").asText();
                                 TPasien.setText(response.path("peserta").path("nama").asText());
                                 NoKartu.setText(response.path("peserta").path("noKartu").asText());
-                                TNoRM.setText(Sequel.cariIsiSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
+                                TNoRM.setText(Sequel.cariStringSmc("select pasien.no_rkm_medis from pasien where pasien.no_peserta = ?", NoKartu.getText()));
                                 NIK.setText(response.path("peserta").path("nik").asText());
                                 if (NIK.getText().contains("null") || NIK.getText().isBlank()) {
-                                    NIK.setText(Sequel.cariIsiSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                                    NIK.setText(Sequel.cariStringSmc("select no_ktp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                                 }
                                 JK.setText(response.path("peserta").path("sex").asText());
                                 Status.setText(response.path("peserta").path("statusPeserta").path("kode").asText() + " " + response.path("peserta").path("statusPeserta").path("keterangan").asText());
@@ -3264,7 +3264,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                                 Catatan.setText("Anjungan Pasien Mandiri RS Samarinda Medika Citra");
                                 NoTelp.setText(response.path("peserta").path("mr").path("noTelepon").asText());
                                 if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                                    NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                                    NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                                 }
                             } else {
                                 emptTeks();
@@ -3350,7 +3350,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                         jammulai = rs.getString("jam_mulai");
                         jamselesai = rs.getString("jam_selesai");
                         kuota = rs.getInt("kuota");
-                        datajam = Sequel.cariIsiSmc("select date_add(concat(?, ' ', ?), interval ? minute)", Valid.getTglSmc(TanggalSEP), jammulai, String.valueOf(Integer.parseInt(NoReg.getText()) * 5));
+                        datajam = Sequel.cariStringSmc("select date_add(concat(?, ' ', ?), interval ? minute)", Valid.getTglSmc(TanggalSEP), jammulai, String.valueOf(Integer.parseInt(NoReg.getText()) * 5));
                         parsedDate = dateFormat.parse(datajam);
                     } else {
                         System.out.println("Jadwal tidak ditemukan...!");
@@ -3643,10 +3643,10 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             return;
         }
 
-        String kodePoliKontrol = Sequel.cariIsiSmc("select kd_poli_bpjs from bridging_surat_kontrol_bpjs where no_surat = ?", noSKDP),
-            namaPoliKontrol = Sequel.cariIsiSmc("select nm_poli_bpjs from maping_poli_bpjs where kd_poli_bpjs = ?", kodePoliKontrol),
-            kodeDokterKontrol = Sequel.cariIsiSmc("select kd_dokter_bpjs from bridging_surat_kontrol_bpjs where no_surat = ?", noSKDP),
-            namaDokterKontrol = Sequel.cariIsiSmc("select nm_dokter_bpjs from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", kodeDokterKontrol);
+        String kodePoliKontrol = Sequel.cariStringSmc("select kd_poli_bpjs from bridging_surat_kontrol_bpjs where no_surat = ?", noSKDP),
+            namaPoliKontrol = Sequel.cariStringSmc("select nm_poli_bpjs from maping_poli_bpjs where kd_poli_bpjs = ?", kodePoliKontrol),
+            kodeDokterKontrol = Sequel.cariStringSmc("select kd_dokter_bpjs from bridging_surat_kontrol_bpjs where no_surat = ?", noSKDP),
+            namaDokterKontrol = Sequel.cariStringSmc("select nm_dokter_bpjs from maping_dokter_dpjpvclaim where kd_dokter_bpjs = ?", kodeDokterKontrol);
 
         try {
             utc = String.valueOf(api.GetUTCdatetimeAsString());
@@ -3761,17 +3761,17 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             coba++;
         }
 
-        String isNoRawat = Sequel.cariIsiSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
+        String isNoRawat = Sequel.cariStringSmc("select no_rawat from reg_periksa where tgl_registrasi = ? and no_rkm_medis = ? and kd_poli = ? and kd_dokter = ?", Valid.getTglSmc(TanggalSEP), TNoRM.getText(), kodepolireg, kodedokterreg);
 
         if (coba == maxCoba && (isNoRawat == null || !isNoRawat.equals(TNoRw.getText()))) {
             System.out.println("======================================================");
             System.out.println("Tidak dapat mendaftarkan pasien dengan detail berikut:");
             System.out.println("No. Rawat: " + TNoRw.getText());
             System.out.println("Tgl. Registrasi: " + Valid.getTglSmc(TanggalSEP));
-            System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-            System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariIsiSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-            System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
-            System.out.println("Kode Poli: " + kodepolireg + " (Ditemukan: " + Sequel.cariIsiSmc("select kd_poli from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+            System.out.println("No. Antrian: " + NoReg.getText() + " (Ditemukan: " + Sequel.cariStringSmc("select no_reg from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+            System.out.println("No. RM: " + TNoRM.getText() + " (Ditemukan: " + Sequel.cariStringSmc("select no_rkm_medis from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+            System.out.println("Kode Dokter: " + kodedokterreg + " (Ditemukan: " + Sequel.cariStringSmc("select kd_dokter from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
+            System.out.println("Kode Poli: " + kodepolireg + " (Ditemukan: " + Sequel.cariStringSmc("select kd_poli from reg_periksa where no_rawat = ?", TNoRw.getText()) + ")");
             System.out.println("======================================================");
 
             return false;
@@ -3786,7 +3786,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         int coba = 0, maxCoba = 5;
 
         NoRujukMasuk.setText(
-            Sequel.cariIsiSmc(
+            Sequel.cariStringSmc(
                 "select concat('BR/', date_format(?, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
                 Valid.getTglSmc(TanggalSEP), Valid.getTglSmc(TanggalSEP)
             )
@@ -3799,7 +3799,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             "0", NmPpkRujukan.getText(), KdPenyakit.getText(), "-", "-", NoRujukMasuk.getText()
         ))) {
             NoRujukMasuk.setText(
-                Sequel.cariIsiSmc(
+                Sequel.cariStringSmc(
                     "select concat('BR/', date_format(?, '%Y/%m/%d/'), lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
                     Valid.getTglSmc(TanggalSEP), Valid.getTglSmc(TanggalSEP)
                 )
@@ -3810,7 +3810,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             coba++;
         }
 
-        String isNoRujukMasuk = Sequel.cariIsiSmc("select rujuk_masuk.no_balasan from rujuk_masuk where rujuk_masuk.no_rawat = ?", TNoRw.getText());
+        String isNoRujukMasuk = Sequel.cariStringSmc("select rujuk_masuk.no_balasan from rujuk_masuk where rujuk_masuk.no_rawat = ?", TNoRw.getText());
 
         if (coba == maxCoba && (isNoRujukMasuk == null || (!isNoRujukMasuk.equals(NoRujukMasuk.getText())))) {
             System.out.println("======================================================");

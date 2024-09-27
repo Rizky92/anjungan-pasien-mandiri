@@ -2032,7 +2032,7 @@ public class DlgRegistrasiSEPMobileJKN extends javax.swing.JDialog {
                     NIK.setText(rsjkn.getString("nik"));
                     NoTelp.setText(rsjkn.getString("nohp"));
                     if (NoTelp.getText().contains("null") || NoTelp.getText().isBlank()) {
-                        NoTelp.setText(Sequel.cariIsiSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
+                        NoTelp.setText(Sequel.cariStringSmc("select no_tlp from pasien where no_rkm_medis = ?", TNoRM.getText()));
                     }
                     // CEK STATUS PASIEN
                     try {
@@ -2164,8 +2164,8 @@ public class DlgRegistrasiSEPMobileJKN extends javax.swing.JDialog {
                                                 AsesmenPoli.setSelectedIndex(0);
                                                 AsalRujukan.setSelectedIndex(1);
                                                 NoSKDP.setText(rskontrol.getString("no_surat"));
-                                                KdPpkRujukan.setText(Sequel.cariIsiSmc("select kode_ppk from setting"));
-                                                NmPpkRujukan.setText(Sequel.cariIsiSmc("select nama_instansi from setting"));
+                                                KdPpkRujukan.setText(Sequel.cariStringSmc("select kode_ppk from setting"));
+                                                NmPpkRujukan.setText(Sequel.cariStringSmc("select nama_instansi from setting"));
                                             } else {
                                                 // KONTROL POLI
                                                 try {
@@ -2509,7 +2509,7 @@ public class DlgRegistrasiSEPMobileJKN extends javax.swing.JDialog {
     private boolean simpanRujukan() {
         int coba = 0, maxCoba = 5;
         NoRujukMasuk.setText(
-            Sequel.cariIsiSmc(
+            Sequel.cariStringSmc(
                 "select concat('BR/', date_format(?, '%Y/%m/%d'), '/', lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
                 Valid.SetTgl(TanggalSEP.getSelectedItem().toString()), Valid.SetTgl(TanggalSEP.getSelectedItem().toString())
             )
@@ -2520,7 +2520,7 @@ public class DlgRegistrasiSEPMobileJKN extends javax.swing.JDialog {
         );
         while (coba < maxCoba && ! sukses) {
             NoRujukMasuk.setText(
-                Sequel.cariIsiSmc(
+                Sequel.cariStringSmc(
                     "select concat('BR/', date_format(?, '%Y/%m/%d/'), lpad(ifnull(max(convert(right(rujuk_masuk.no_balasan, 4), signed)), 0) + 1, 4, '0')) from rujuk_masuk where rujuk_masuk.no_balasan like concat('BR/', date_format(?, '%Y/%m/%d/'), '%')",
                     Valid.SetTgl(TanggalSEP.getSelectedItem().toString()), Valid.SetTgl(TanggalSEP.getSelectedItem().toString())
                 )

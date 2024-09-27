@@ -242,7 +242,7 @@ public class DlgAmbilAntrean extends javax.swing.JDialog {
         String sqlQuery = "type, noantrian, postdate, start_time, end_time";
         String[] values = new String[]{jnsloket, String.valueOf(antriansekarang), Sequel.cariIsi("select current_date()"), Sequel.cariIsi("select current_time()"), "00:00:00"};
 
-        if (Sequel.menyimpantfautoincrement("antrian_loket", sqlQuery, values.length, values) == true) {
+        if (Sequel.menyimpantf("antrian_loket", sqlQuery, "Antrian Loket", values.length, values) == true) {
             CetakAntrian(lblNamaAntrian.getText(), antriansekarang, Sequel.cariIsi("select current_date()"), Sequel.cariIsi("select current_time()"));
             lblNamaAntrian.setText("");
             lblNoAntrian.setText("");
