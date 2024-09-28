@@ -9,6 +9,7 @@ import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -33,7 +34,6 @@ import javax.print.attribute.standard.Copies;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -45,12 +45,15 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
+import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
@@ -117,6 +120,14 @@ public final class validasi {
 
     public String getTglJamSmc(Tanggal tgljam) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(tgljam.getDate());
+    }
+    
+    public void setTglSmc(Tanggal component, String tanggal) {
+        try {
+            component.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(tanggal));
+        } catch (Exception e) {
+            component.setDate(new Date());
+        }
     }
 
     public String setTglJamSmc(Date tgljam) {
@@ -947,7 +958,7 @@ public final class validasi {
         } // end if
 
         try {
-            ps = connect.prepareStatement(qry);
+            ps = koneksi.prepareStatement(qry);
             try {
                 String namafile = "./" + reportDirName + "/" + reportName;
                 rs = ps.executeQuery();
@@ -1146,8 +1157,8 @@ public final class validasi {
 
     public void MyReportSilentPrint(String reportName, Map parameters, String title) {
         try {
-            JasperViewer jasperViewer = new JasperViewer(JasperFillManager.fillReport("./report/" + reportName, parameters, connect), false);
-            JasperPrint jasperPrint = JasperFillManager.fillReport("./report/" + reportName, parameters, connect);
+            JasperViewer jasperViewer = new JasperViewer(JasperFillManager.fillReport("./report/" + reportName, parameters, koneksi), false);
+            JasperPrint jasperPrint = JasperFillManager.fillReport("./report/" + reportName, parameters, koneksi);
 //            jasperViewer.setTitle(title);
 //            jasperViewer.setLocationRelativeTo(null);
 //            jasperViewer.setVisible(true);

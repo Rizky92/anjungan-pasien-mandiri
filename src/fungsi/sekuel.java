@@ -173,7 +173,7 @@ public final class sekuel {
     public String autoNomorSmc(String table, String kolom, int panjang, String pad, String tanggal) {
         return autoNomorSmc("", "", table, kolom, panjang, pad, tanggal, 1);
     }
-
+    
     public String cariStringSmc(String sql, String... values) {
         String output = "";
 
