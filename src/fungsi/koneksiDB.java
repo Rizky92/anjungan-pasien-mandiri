@@ -37,16 +37,10 @@ public class koneksiDB {
                 connection = dataSource.getConnection();
                 System.out.println("  Koneksi Berhasil. Sorry bro loading, silahkan baca dulu.... \n\n"
                     + "	 Software ini adalah Software Menejemen Rumah Sakit/Klinik/\n"
-                    + "  Puskesmas yang gratis dan boleh digunakan siapa saja tanpa dikenai \n"
+                    + "  Puskesmas yang gratis dan boleh digunakan siapa saja tanpa dikenai\n"
                     + "  biaya apapun. Dilarang keras memperjualbelikan/mengambil \n"
                     + "  keuntungan dari Software ini dalam bentuk apapun tanpa seijin pembuat \n"
-                    + "  software (Khanza.Soft Media). Bagi yang sengaja memperjualbelikan/\n"
-                    + "  mengambil keuntangan dari softaware ini tanpa ijin, kami sumpahi sial \n"
-                    + "  1000 turunan, miskin sampai 500 turunan. Selalu mendapat kecelakaan \n"
-                    + "  sampai 400 turunan. Anak pertamanya cacat tidak punya kaki sampai 300 \n"
-                    + "  turunan. Susah cari jodoh sampai umur 50 tahun sampai 200 turunan.\n"
-                    + "  Ya Alloh maafkan kami karena telah berdoa buruk, semua ini kami lakukan\n"
-                    + "  karena kami tidak pernah rela karya kami dibajak tanpa ijin.\n\n"
+                    + "  software (Khanza.Soft Media).\n"
                     + "                                                                           \n"
                     + "  #    ____  ___  __  __  ____   ____    _  __ _                              \n"
                     + "  #   / ___||_ _||  \\/  ||  _ \\ / ___|  | |/ /| |__    __ _  _ __   ____ __ _ \n"
@@ -75,6 +69,15 @@ public class koneksiDB {
         }
     }
     
+    public static String raw(String propertyName, String defaultValue) {
+        try (FileInputStream f = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(f);
+            return prop.getProperty(propertyName, defaultValue);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     public static String rawEnc(String propertyName) {
         try (FileInputStream f = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(f);
@@ -83,7 +86,7 @@ public class koneksiDB {
             return "";
         }
     }
-    
+
     public static boolean bRaw(String propertyName) {
         try (FileInputStream f = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(f);
@@ -92,7 +95,7 @@ public class koneksiDB {
             return false;
         }
     }
-    
+
     public static boolean bRaw(String propertyName, boolean defaultValue) {
         try (FileInputStream f = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(f);
@@ -101,7 +104,7 @@ public class koneksiDB {
             return defaultValue;
         }
     }
-    
+
     public static boolean bRawEnc(String propertyName) {
         try (FileInputStream f = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(f);
@@ -110,7 +113,7 @@ public class koneksiDB {
             return false;
         }
     }
-    
+
     public static boolean bRawEnc(String propertyName, boolean defaultValue) {
         try (FileInputStream f = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(f);
@@ -121,57 +124,31 @@ public class koneksiDB {
     }
 
     public static String PRINTER_REGISTRASI() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return prop.getProperty("PRINTER_REGISTRASI");
-        } catch (Exception e) {
-            return "";
-        }
+        return koneksiDB.raw("PRINTER_REGISTRASI");
     }
 
     public static String PRINTER_BARCODE() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return prop.getProperty("PRINTER_BARCODE");
-        } catch (Exception e) {
-            return "";
-        }
+        return koneksiDB.raw("PRINTER_BARCODE");
     }
 
     public static int PRINTJUMLAHBARCODE() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return Integer.parseInt(prop.getProperty("PRINTJUMLAHBARCODE", "3"));
-        } catch (Exception e) {
-            return 3;
-        }
+        return Integer.parseInt(koneksiDB.raw("PRINTJUMLAHBARCODE", "3"));
     }
 
     public static String URLAPLIKASIFINGERPRINTBPJS() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return prop.getProperty("URLAPLIKASIFINGERPRINTBPJS");
-        } catch (Exception e) {
-            return "";
-        }
+        return koneksiDB.raw("URLAPLIKASIFINGERPRINTBPJS");
+    }
+    
+    public static String URLAPLIKASIFRISTABPJS() {
+        return koneksiDB.raw("URLAPLIKASIFRISTABPJS");
     }
 
     public static String USERFINGERPRINTBPJS() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return EnkripsiAES.decrypt(prop.getProperty("USERFINGERPRINTBPJS"));
-        } catch (Exception e) {
-            return "";
-        }
+        return koneksiDB.raw("USERFINGERPRINTBPJS");
     }
 
     public static String PASSFINGERPRINTBPJS() {
-        try {
-            prop.loadFromXML(new FileInputStream("setting/apm.xml"));
-            return EnkripsiAES.decrypt(prop.getProperty("PASSWORDFINGERPRINTBPJS"));
-        } catch (Exception e) {
-            return "";
-        }
+        return koneksiDB.raw("PASSFINGERPRINTBPJS");
     }
 
     public static String ADAMLABSAPIURL() {

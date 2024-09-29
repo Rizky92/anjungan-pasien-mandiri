@@ -10,25 +10,29 @@ Aplikasi anjungan pasien mandiri (APM) modifikasi dari [APM RS Indriati Boyolali
 ### Konfigurasi
 Berikut adalah konfigurasi yang disediakan dalam file `apm.xml`:
 ```xml
-<entry key="URLAPLIKASIFINGERPRINTBPJS">C:\Program Files (x86)\Aplikasi Sidik Jari BPJS Kesehatan\After.exe</entry>
+<entry key="URLAPLIKASIFINGERPRINTBPJS">D:\BPJS Kesehatan\Aplikasi fingerprint BPJS\After.exe</entry>
+<entry key="URLAPLIKASIFRISTABPJS">D:\BPJS Kesehatan\Aplikasi frista BPJS\frista.exe</entry>
 <entry key="USERFINGERPRINTBPJS"></entry>
-<entry key="PASSFINGERPRINTBPJS"></entry>
-<entry key="PRINTER_BARCODE"></entry>
-<entry key="PRINTERJUMLAHBARCODE"></entry>
+<entry key="PASSWORDFINGERPRINTBPJS"></entry>
 <entry key="PRINTER_REGISTRASI"></entry>
+<entry key="PRINTER_BARCODE"></entry>
+<entry key="PRINTERJUMLAHBARCODE">3</entry>
 ```
 
 #### key "URLAPLIKASIFINGERPRINTBPJS"
-Berisi path ke aplikasi fingerprint BPJS
+Berisi path ke aplikasi fingerprint BPJS.
+
+#### key "URLAPLIKASIFINGERPRINTBPJS"
+Berisi path ke aplikasi frista BPJS.
 
 #### key "USERFINGERPRINTBPJS" dan "PASSFINGERPRINTBPJS"
-Berisi kredensial login username dan password aplikasi fingerprint BPJS, dengan kredensial dienkripsi menggunakan enkripsi dari SIMRS Khanza.
+Berisi kredensial login username dan password aplikasi fingerprint/frista BPJS, dengan kredensial dienkripsi menggunakan enkripsi dari SIMRS Khanza.
+
+#### key "PRINTER_REGISTRASI"
+Digunakan untuk mengetahui nama printer service untuk mencetak lembar registrasi pasien dan SEP pasien.
 
 #### key "PRINTER_BARCODE"
 Digunakan untuk mengetahui nama printer service untuk mencetak barcode.
 
 #### key "PRINTERJUMLAHBARCODE"
 Digunakan untuk mensetting jumlah barcode yang akan dicetak secara default.
-
-#### key "PRINTER_REGISTRASI"
-Digunakan untuk mengetahui nama printer service untuk mencetak lembar registrasi pasien dan SEP pasien.
