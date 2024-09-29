@@ -174,7 +174,7 @@ public final class sekuel {
         return autoNomorSmc("", "", table, kolom, panjang, pad, tanggal, 1);
     }
     
-    public String cariStringSmc(String sql, String... values) {
+    public String cariIsiSmc(String sql, String... values) {
         String output = "";
 
         try (PreparedStatement ps = koneksi.prepareStatement(sql)) {

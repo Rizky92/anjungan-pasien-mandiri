@@ -401,7 +401,7 @@ public class DlgCekKunjunganPertamaSEP extends javax.swing.JDialog {
                 this.dispose();
                 form.setVisible(true);
             } else if (Sequel.cariIntegerSmc("select count(*) from pasien where no_rkm_medis = ?", NoRMPasien.getText()) == 1) {
-                form.tampilKunjunganPertama(Sequel.cariStringSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
+                form.tampilKunjunganPertama(Sequel.cariIsiSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
                 form.setSize(this.getWidth(), this.getHeight());
                 form.setLocationRelativeTo(jPanel1);
                 this.dispose();
@@ -441,7 +441,7 @@ public class DlgCekKunjunganPertamaSEP extends javax.swing.JDialog {
             this.dispose();
             form.setVisible(true);
         } else if (Sequel.cariIntegerSmc("select count(*) from pasien where no_rkm_medis = ?", NoRMPasien.getText()) == 1) {
-            form.tampilKunjunganPertama(Sequel.cariStringSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
+            form.tampilKunjunganPertama(Sequel.cariIsiSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
             form.setSize(this.getWidth(), this.getHeight());
             form.setLocationRelativeTo(jPanel1);
             this.dispose();

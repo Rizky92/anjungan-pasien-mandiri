@@ -350,9 +350,9 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
                 if (Sequel.cariIntegerSmc("select count(*) from pasien where no_peserta = ?", NoRMPasien.getText()) == 1) {
                     form.tampilKunjunganBedaPoli(NoRMPasien.getText());
                 } else if (Sequel.cariIntegerSmc("select count(*) from pasien where no_rkm_medis = ?", NoRMPasien.getText()) == 1) {
-                    form.tampilKunjunganBedaPoli(Sequel.cariStringSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
+                    form.tampilKunjunganBedaPoli(Sequel.cariIsiSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
                 } else if (Sequel.cariInteger("select count(*) from pasien where no_ktp = ?", NoRMPasien.getText()) == 1) {
-                    form.tampilKunjunganBedaPoli(Sequel.cariStringSmc("select no_peserta from pasien where no_ktp = ?", NoRMPasien.getText()));
+                    form.tampilKunjunganBedaPoli(Sequel.cariIsiSmc("select no_peserta from pasien where no_ktp = ?", NoRMPasien.getText()));
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "Data pasien tidak ditemukan!");
                     this.setCursor(Cursor.getDefaultCursor());
@@ -380,9 +380,9 @@ public class DlgCekKunjunganBedaPoli extends javax.swing.JDialog {
             if (Sequel.cariIntegerSmc("select count(*) from pasien where no_peserta = ?", NoRMPasien.getText()) == 1) {
                 form.tampilKunjunganBedaPoli(NoRMPasien.getText());
             } else if (Sequel.cariIntegerSmc("select count(*) from pasien where no_rkm_medis = ?", NoRMPasien.getText()) == 1) {
-                form.tampilKunjunganBedaPoli(Sequel.cariStringSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
+                form.tampilKunjunganBedaPoli(Sequel.cariIsiSmc("select no_peserta from pasien where no_rkm_medis = ?", NoRMPasien.getText()));
             } else if (Sequel.cariInteger("select count(*) from pasien where no_ktp = ?", NoRMPasien.getText()) == 1) {
-                form.tampilKunjunganBedaPoli(Sequel.cariStringSmc("select no_peserta from pasien where no_ktp = ?", NoRMPasien.getText()));
+                form.tampilKunjunganBedaPoli(Sequel.cariIsiSmc("select no_peserta from pasien where no_ktp = ?", NoRMPasien.getText()));
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Data pasien tidak ditemukan!");
                 this.setCursor(Cursor.getDefaultCursor());

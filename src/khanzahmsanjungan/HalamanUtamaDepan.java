@@ -20,11 +20,9 @@ import javax.swing.JOptionPane;
  * @author it-rsib
  */
 public class HalamanUtamaDepan extends javax.swing.JFrame {
-
-    private static HalamanUtamaDepan myInstance;
-    private sekuel Sequel = new sekuel();
-    private validasi Valid = new validasi();
-
+    private final sekuel Sequel = new sekuel();
+    private final validasi Valid = new validasi();
+    
     /**
      * Creates new form HalamanUtamaDepan
      */
@@ -36,12 +34,8 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         this.setSize(screenSize.width, screenSize.height);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        btnAdmin10.setEnabled(false);
-        jPanel1.remove(btnAdmin10);
         jPanel1.remove(btnAdmin11);
-        jPanel1.remove(btnAdmin7);
-        
-        jPanel1.repaint();
+        repaint();
     }
 
     /**
@@ -241,11 +235,10 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdmin2ActionPerformed
 
     private void btnAdmin7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin7ActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Mohon maaf, fitur masih dalam tahap pengembangan");
-//        DlgCekBooking pilih = new DlgCekBooking(null, true);
-//        pilih.setSize(this.getWidth(), this.getHeight());
-//        pilih.setLocationRelativeTo(this);
-//        pilih.setVisible(true);
+        DlgCekBooking pilih = new DlgCekBooking(null, true);
+        pilih.setSize(this.getWidth(), this.getHeight());
+        pilih.setLocationRelativeTo(this);
+        pilih.setVisible(true);
     }//GEN-LAST:event_btnAdmin7ActionPerformed
 
     private void btnAdmin5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin5ActionPerformed
@@ -260,8 +253,6 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
         pilih.setSize(this.getWidth(), this.getHeight());
         pilih.setLocationRelativeTo(this);
         pilih.setVisible(true);
-
-//        JOptionPane.showMessageDialog(rootPane, "Mohon maaf, fitur masih dalam tahap pengembangan");
     }//GEN-LAST:event_btnAdmin8ActionPerformed
 
     private void btnAdmin9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin9ActionPerformed
@@ -272,19 +263,17 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdmin9ActionPerformed
 
     private void btnAdmin10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin10ActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Mohon maaf, fitur masih dalam tahap pengembangan");
-//        HalamanUtamaAntrian pilih = new HalamanUtamaAntrian();
-//        pilih.setSize(this.getWidth(), this.getHeight());
-//        pilih.setLocationRelativeTo(this);
-//        pilih.setVisible(true);
+        HalamanUtamaAntrian pilih = new HalamanUtamaAntrian();
+        pilih.setSize(this.getWidth(), this.getHeight());
+        pilih.setLocationRelativeTo(this);
+        pilih.setVisible(true);
     }//GEN-LAST:event_btnAdmin10ActionPerformed
 
     private void btnAdmin11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin11ActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Mohon maaf, fitur masih dalam tahap pengembangan");
-//        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//        String nikktppetugas = Sequel.cariIsi("select no_ktp from pegawai where nik='0132' ");
-//        Valid.panggilUrl("kyc/index.php?&nikagent=" + nikktppetugas + "");
-//        this.setCursor(Cursor.getDefaultCursor());
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        String nikktppetugas = Sequel.cariIsi("select no_ktp from pegawai where nik='0132' ");
+        Valid.panggilUrl("kyc/index.php?&nikagent=" + nikktppetugas + "");
+        this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnAdmin11ActionPerformed
 
     /**
@@ -320,14 +309,6 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
                 new HalamanUtamaDepan().setVisible(true);
             }
         });
-    }
-
-    public static HalamanUtamaDepan getInstance() {
-        if (myInstance == null) {
-            myInstance = new HalamanUtamaDepan();
-        }
-
-        return myInstance;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

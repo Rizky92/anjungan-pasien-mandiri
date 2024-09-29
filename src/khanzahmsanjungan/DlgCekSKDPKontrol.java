@@ -470,7 +470,7 @@ public class DlgCekSKDPKontrol extends javax.swing.JDialog {
 
     private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnTemplateActionPerformed
     {//GEN-HEADEREND:event_btnTemplateActionPerformed
-        InputSKDP.setText(Sequel.cariStringSmc("select kode_ppk from setting"));
+        InputSKDP.setText(Sequel.cariIsiSmc("select kode_ppk from setting"));
     }//GEN-LAST:event_btnTemplateActionPerformed
 
     /**

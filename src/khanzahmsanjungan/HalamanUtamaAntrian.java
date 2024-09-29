@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package khanzahmsanjungan;
 
 import java.awt.Dimension;
@@ -9,7 +5,6 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -75,7 +70,7 @@ public class HalamanUtamaAntrian extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(3, 0));
 
         btnAdmin2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/onlineadmisi.png"))); // NOI18N
-        btnAdmin2.setText("ADMISI (Appointment)");
+        btnAdmin2.setText("ANTRIAN BPJS");
         btnAdmin2.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin2.setIconTextGap(0);
         btnAdmin2.setPreferredSize(new java.awt.Dimension(200, 90));
@@ -87,7 +82,7 @@ public class HalamanUtamaAntrian extends javax.swing.JFrame {
         jPanel1.add(btnAdmin2);
 
         btnAdmin3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/offlineadmisi.png"))); // NOI18N
-        btnAdmin3.setText("ADMISI (Walk In)");
+        btnAdmin3.setText("ANTRIAN NON-BPJS");
         btnAdmin3.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
         btnAdmin3.setIconTextGap(0);
         btnAdmin3.setPreferredSize(new java.awt.Dimension(200, 90));
