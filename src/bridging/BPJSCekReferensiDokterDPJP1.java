@@ -96,7 +96,7 @@ public final class BPJSCekReferensiDokterDPJP1 extends javax.swing.JDialog {
 
         Dokter.setDocument(new batasInput((byte) 100).getKata(Dokter));
 
-        if (koneksiDB.CARICEPAT().equals("aktif")) {
+        if (koneksiDB.CARICEPAT()) {
             Dokter.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) {

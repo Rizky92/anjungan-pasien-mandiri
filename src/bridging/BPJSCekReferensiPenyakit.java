@@ -91,7 +91,7 @@ public final class BPJSCekReferensiPenyakit extends javax.swing.JDialog {
 
         diagnosa.setDocument(new batasInput((byte) 100).getKata(diagnosa));
 
-        if (koneksiDB.CARICEPAT().equals("aktif")) {
+        if (koneksiDB.CARICEPAT()) {
             diagnosa.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) {

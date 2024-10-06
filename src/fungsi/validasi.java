@@ -71,7 +71,7 @@ import widget.TextBox;
  */
 public final class validasi {
     private int a, j, i, result = 0;
-    private String s, s1, auto, PEMBULATANHARGAOBAT = koneksiDB.PEMBULATANHARGAOBAT();
+    private String s, s1, auto;
     private final Connection koneksi = koneksiDB.condb();
     private final sekuel Sequel = new sekuel();
     private final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
@@ -1517,28 +1517,6 @@ public final class validasi {
         }
     }
 
-    public void panggilUrl(String url) {
-        String os = System.getProperty("os.name").toLowerCase();
-        Runtime rt = Runtime.getRuntime();
-        try {
-            if (os.contains("win")) {
-                rt.exec("rundll32 url.dll,FileProtocolHandler " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + koneksiDB.HYBRIDWEB() + "/" + url);
-            } else if (os.contains("mac")) {
-                rt.exec("open " + "http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + koneksiDB.HYBRIDWEB() + "/" + url);
-            } else if (os.contains("nix") || os.contains("nux")) {
-                String[] browsers = {"x-www-browser", "epiphany", "firefox", "mozilla", "konqueror", "chrome", "chromium", "netscape", "opera", "links", "lynx", "midori"};
-                // Build a command string which looks like "browser1 "url" || browser2 "url" ||..."
-                StringBuilder cmd = new StringBuilder();
-                for (i = 0; i < browsers.length; i++) {
-                    cmd.append(i == 0 ? "" : " || ").append(browsers[i]).append(" \"").append("http://").append(koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB()).append("/").append(koneksiDB.HYBRIDWEB()).append("/").append(url).append("\" ");
-                }
-                rt.exec(new String[] {"sh", "-c", cmd.toString()});
-            }
-        } catch (Exception e) {
-            System.out.println("Notif Browser : " + e);
-        }
-    }
-
     public void panggilUrl2(String url) {
         String os = System.getProperty("os.name").toLowerCase();
         Runtime rt = Runtime.getRuntime();
@@ -1558,14 +1536,6 @@ public final class validasi {
             }
         } catch (Exception e) {
             System.out.println("Notif Browser : " + e);
-        }
-    }
-
-    public void printUrl(String url) throws URISyntaxException {
-        try {
-            desktop.print(new File(new java.net.URI("http://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB() + "/" + url)));
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
@@ -1772,23 +1742,6 @@ public final class validasi {
         }
 
         return x;
-    }
-
-    public double roundUp(double number, int multiple) {
-        if (PEMBULATANHARGAOBAT.equals("yes")) {
-            result = multiple;
-            if (number % multiple == 0) {
-                return (int) number;
-            }
-
-            if (number % multiple != 0) {
-                int division = (int) ((number / multiple) + 1);
-                result = division * multiple;
-            }
-            return result;
-        } else {
-            return Math.round(number);
-        }
     }
 
     public String terbilang(double angka) {

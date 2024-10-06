@@ -33,11 +33,11 @@ public class KhanzaHMSAnjungan {
             for (PrintService ps: PrintServiceLookup.lookupPrintServices(null, null)) {
                 System.out.println("Printer ditemukan: " + ps.getName());
                 
-                if (ps.getName().equals(koneksiDB.PRINTER_BARCODE())) {
+                if (ps.getName().equals(koneksiDB.PRINTERBARCODE())) {
                     printerBarcode = ps.getName();
                 }
                 
-                if (ps.getName().equals(koneksiDB.PRINTER_REGISTRASI())) {
+                if (ps.getName().equals(koneksiDB.PRINTERREGISTRASI())) {
                     printerRegistrasi = ps.getName();
                 }
             }
