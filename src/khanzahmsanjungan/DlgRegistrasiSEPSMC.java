@@ -58,6 +58,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
     private final sekuel Sequel = new sekuel();
     private final validasi Valid = new validasi();
     private final ApiBPJS api = new ApiBPJS();
+    private final DlgCariJadwalDokterBPJS jadwalDokter = new DlgCariJadwalDokterBPJS(null, true);
     private final BPJSCekReferensiDokterDPJP1 dokter = new BPJSCekReferensiDokterDPJP1(null, true);
     private final BPJSCekReferensiPenyakit penyakit = new BPJSCekReferensiPenyakit(null, true);
     private final DlgCariPoliBPJS poli = new DlgCariPoliBPJS(null, true);
@@ -70,7 +71,8 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         URLAPIBPJS = koneksiDB.URLAPIBPJS(),
         USERFINGERPRINTBPJS = koneksiDB.USERFINGERPRINTBPJS(),
         PASSFINGERPRINTBPJS = koneksiDB.PASSFINGERPRINTBPJS(),
-        URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS();
+        URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS(),
+        URLAPLIKASIFRISTABPJS = koneksiDB.URLAPLIKASIFRISTABPJS();
 
     private String kodeBooking = "",
         jenisKunjungan = "3",
@@ -89,6 +91,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         hari = "",
         jamMulai = "",
         jamSelesai = "",
+        jamPraktek = "",
         instansiNama = "",
         instansiKab = "",
         url = "",
@@ -197,6 +200,25 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                 }
                 noRujukan.requestFocus();
             }
+        });
+        
+        jadwalDokter.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (jadwalDokter.getTable().getSelectedRow() != -1) {
+                    kodeDokterBPJS.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 1).toString());
+                    namaDokterBPJS.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 5).toString());
+                    kodeDokterRS = jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 3).toString();
+                    if (jenisPelayanan.getSelectedIndex() == 1) {
+                        jamPraktek = jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 6).toString();
+                        kuota = Integer.parseInt(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 7).toString());
+                        kodeDPJPLayanan.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 1).toString());
+                        namaDPJPLayanan.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 5).toString());
+                    }
+                    pilihDokterBPJS.requestFocus();
+                }
+            }
+            
         });
     }
 
@@ -1240,10 +1262,10 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
     }//GEN-LAST:event_simpanActionPerformed
 
     private void pilihDokterBPJSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pilihDokterBPJSActionPerformed
-        dokter.setSize(jPanel1.getWidth() - 75, jPanel1.getHeight() - 75);
-        dokter.setLocationRelativeTo(jPanel1);
-        dokter.carinamadokter(kodePoliBPJS.getText(), namaPoliBPJS.getText());
-        dokter.setVisible(true);
+        jadwalDokter.setSize(jPanel1.getWidth() - 75, jPanel1.getHeight() - 75);
+        jadwalDokter.setLocationRelativeTo(jPanel1);
+        jadwalDokter.tampil(getHari(Sequel.cariIntegerSmc("select dayofweek(?)", Valid.getTglSmc(tglSEP))), kodePoliRS, namaPoliBPJS.getText());
+        jadwalDokter.setVisible(true);
     }//GEN-LAST:event_pilihDokterBPJSActionPerformed
 
     private void tujuanKunjunganItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tujuanKunjunganItemStateChanged
@@ -3538,6 +3560,19 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
             "no_rkm_medis = ?",
             noTelp.getText(), nik.getText(), noRM.getText()
         );
+    }
+    
+    private String getHari(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case 1: return "AKHAD";
+            case 2: return "SENIN";
+            case 3: return "SELASA";
+            case 4: return "RABU";
+            case 5: return "KAMIS";
+            case 6: return "JUMAT";
+            case 7: return "SABTU";
+            default: return "";
+        }
     }
 
     private void resetAksi() {
