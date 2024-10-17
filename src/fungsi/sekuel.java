@@ -50,7 +50,7 @@ import uz.ncipro.calendar.JDateTimePicker;
 public final class sekuel {
     private javax.swing.ImageIcon icon = null;
     private String folder;
-    private final String AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL();
+    private final boolean AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL();
     private final Connection koneksi = koneksiDB.condb();
     private PreparedStatement ps;
     private ResultSet rs;
@@ -575,7 +575,7 @@ public final class sekuel {
                 ps.close();
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -595,7 +595,7 @@ public final class sekuel {
                     ps.close();
                 }
 
-                if (AKTIFKANTRACKSQL.equals("yes")) {
+                if (AKTIFKANTRACKSQL) {
                     dicari = "";
                     for (angka = 1; angka <= i; angka++) {
                         dicari = dicari + "|" + b[angka - 1];
@@ -629,7 +629,7 @@ public final class sekuel {
                 }
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -657,7 +657,7 @@ public final class sekuel {
                 }
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -685,7 +685,7 @@ public final class sekuel {
                 }
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -709,7 +709,7 @@ public final class sekuel {
                 ps.close();
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -746,7 +746,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -778,7 +778,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -807,7 +807,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -834,7 +834,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -861,7 +861,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -884,7 +884,7 @@ public final class sekuel {
                 ps.close();
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -903,7 +903,7 @@ public final class sekuel {
                     ps.close();
                 }
 
-                if (AKTIFKANTRACKSQL.equals("yes")) {
+                if (AKTIFKANTRACKSQL) {
                     dicari = "";
                     for (angka = 1; angka <= i; angka++) {
                         dicari = dicari + "|" + b[angka - 1];
@@ -930,7 +930,7 @@ public final class sekuel {
                 ps.close();
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -949,7 +949,7 @@ public final class sekuel {
                     ps.close();
                 }
 
-                if (AKTIFKANTRACKSQL.equals("yes")) {
+                if (AKTIFKANTRACKSQL) {
                     dicari = "";
                     for (angka = 1; angka <= i; angka++) {
                         dicari = dicari + "|" + b[angka - 1];
@@ -975,7 +975,7 @@ public final class sekuel {
                 ps.close();
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -994,7 +994,7 @@ public final class sekuel {
                 if (ps != null) {
                     ps.close();
                 }
-                if (AKTIFKANTRACKSQL.equals("yes")) {
+                if (AKTIFKANTRACKSQL) {
                     dicari = "";
                     for (angka = 1; angka <= i; angka++) {
                         dicari = dicari + "|" + b[angka - 1];
@@ -1271,7 +1271,7 @@ public final class sekuel {
                 }
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1301,7 +1301,7 @@ public final class sekuel {
                 }
             }
 
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1328,7 +1328,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1359,7 +1359,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1391,7 +1391,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1604,7 +1604,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1634,7 +1634,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1662,7 +1662,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -1688,7 +1688,7 @@ public final class sekuel {
                     ps.close();
                 }
             }
-            if (AKTIFKANTRACKSQL.equals("yes")) {
+            if (AKTIFKANTRACKSQL) {
                 dicari = "";
                 for (angka = 1; angka <= i; angka++) {
                     dicari = dicari + "|" + a[angka - 1];
@@ -2442,7 +2442,7 @@ public final class sekuel {
     }
 
     private void SimpanTrack(String sql) {
-        if (AKTIFKANTRACKSQL.equals("yes")) {
+        if (AKTIFKANTRACKSQL) {
             try {
                 ps = koneksi.prepareStatement("insert into trackersql values(now(),?,?)");
                 try {

@@ -255,7 +255,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="340" y="10" width="230" height="30"/>
+                  <AbsoluteConstraints x="345" y="10" width="225" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2469,7 +2469,7 @@
                   <Image iconType="3" name="/48x48/konfirmasi.png"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="83"/>
-                <Property name="text" type="java.lang.String" value="Konfirmasi"/>
+                <Property name="text" type="java.lang.String" value="KONFIRMASI"/>
                 <Property name="toolTipText" type="java.lang.String" value="Alt+S"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Inter" size="18" style="0"/>
@@ -2492,7 +2492,7 @@
                   <Image iconType="3" name="/48x48/fingerprint.png"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="75"/>
-                <Property name="text" type="java.lang.String" value="FINGERPRINT BPJS"/>
+                <Property name="text" type="java.lang.String" value="VALIDASI KEHADIRAN"/>
                 <Property name="toolTipText" type="java.lang.String" value="Alt+K"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Inter" size="18" style="0"/>
@@ -2515,7 +2515,7 @@
                   <Image iconType="3" name="/48x48/reset.png"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="75"/>
-                <Property name="text" type="java.lang.String" value="Batal"/>
+                <Property name="text" type="java.lang.String" value="BATAL"/>
                 <Property name="toolTipText" type="java.lang.String" value="Alt+K"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Inter" size="18" style="0"/>

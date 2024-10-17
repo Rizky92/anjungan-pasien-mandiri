@@ -132,8 +132,8 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS(),
         USERFINGERPRINTBPJS = koneksiDB.USERFINGERPRINTBPJS(),
         PASSFINGERPRINTBPJS = koneksiDB.PASSFINGERPRINTBPJS(),
-        PRINTER_REGISTRASI = koneksiDB.PRINTER_REGISTRASI(),
-        PRINTER_BARCODE = koneksiDB.PRINTER_BARCODE(),
+        PRINTER_REGISTRASI = koneksiDB.PRINTERREGISTRASI(),
+        PRINTER_BARCODE = koneksiDB.PRINTERBARCODE(),
         tampilkantni = Sequel.cariIsi("select tampilkan_tni_polri from set_tni_polri"),
         aksi = "";
     private int kuota = 0;
@@ -2404,14 +2404,14 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
         param.put("kotars", Sequel.cariIsi("select setting.kabupaten from setting limit 1"));
 
         if (JenisPelayanan.getSelectedIndex() == 0) {
-            Valid.printReport("rptBridgingSEPAPM1.jasper", koneksiDB.PRINTER_REGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
+            Valid.printReport("rptBridgingSEPAPM1.jasper", koneksiDB.PRINTERREGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
             Valid.MyReport("rptBridgingSEPAPM1.jasper", "report", "::[ Cetak SEP Model 4 ]::", param);
         } else {
-            Valid.printReport("rptBridgingSEPAPM2.jasper", koneksiDB.PRINTER_REGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
+            Valid.printReport("rptBridgingSEPAPM2.jasper", koneksiDB.PRINTERREGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
             Valid.MyReport("rptBridgingSEPAPM2.jasper", "report", "::[ Cetak SEP Model 4 ]::", param);
         }
 
-        Valid.printReport("rptBarcodeRawatAPM.jasper", koneksiDB.PRINTER_BARCODE(), "::[ Barcode Perawatan ]::", Integer.parseInt(JumlahBarcode.getText().trim()), param);
+        Valid.printReport("rptBarcodeRawatAPM.jasper", koneksiDB.PRINTERBARCODE(), "::[ Barcode Perawatan ]::", Integer.parseInt(JumlahBarcode.getText().trim()), param);
         Valid.MyReport("rptBarcodeRawatAPM.jasper", "report", "::[ Barcode Perawatan ]::", param);
     }
 

@@ -41,8 +41,8 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
     private PreparedStatement ps;
     private ResultSet rs;
     private final String URUTNOREG = koneksiDB.URUTNOREG(),
-                         PRINTERREGISTRASI = koneksiDB.PRINTER_REGISTRASI(),
-                         PRINTERBARCODE = koneksiDB.PRINTER_BARCODE();
+                         PRINTERREGISTRASI = koneksiDB.PRINTERREGISTRASI(),
+                         PRINTERBARCODE = koneksiDB.PRINTERBARCODE();
     private String hari = "",
                    regNoRawat = "",
                    regNoUrut = "",

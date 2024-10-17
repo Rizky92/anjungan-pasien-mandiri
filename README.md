@@ -20,13 +20,13 @@ Berikut adalah konfigurasi yang disediakan dalam file `apm.xml`:
 ```
 
 #### key "URLAPLIKASIFINGERPRINTBPJS"
-Berisi path ke aplikasi fingerprint BPJS.
+Berisi path ke aplikasi Fingerprint BPJS.
 
 #### key "URLAPLIKASIFINGERPRINTBPJS"
-Berisi path ke aplikasi frista BPJS.
+Berisi path ke aplikasi FIRSTA BPJS.
 
 #### key "USERFINGERPRINTBPJS" dan "PASSFINGERPRINTBPJS"
-Berisi kredensial login username dan password aplikasi fingerprint/frista BPJS, dengan kredensial dienkripsi menggunakan enkripsi dari SIMRS Khanza.
+Berisi kredensial login username dan password aplikasi Fingerprint/FRISTA BPJS, dengan kredensial dienkripsi menggunakan enkripsi dari SIMRS Khanza.
 
 #### key "PRINTER_REGISTRASI"
 Digunakan untuk mengetahui nama printer service untuk mencetak lembar registrasi pasien dan SEP pasien.

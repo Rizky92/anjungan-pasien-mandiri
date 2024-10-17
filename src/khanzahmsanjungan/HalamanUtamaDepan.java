@@ -270,10 +270,9 @@ public class HalamanUtamaDepan extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdmin10ActionPerformed
 
     private void btnAdmin11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmin11ActionPerformed
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String nikktppetugas = Sequel.cariIsi("select no_ktp from pegawai where nik='0132' ");
-        Valid.panggilUrl("kyc/index.php?&nikagent=" + nikktppetugas + "");
-        this.setCursor(Cursor.getDefaultCursor());
+        JOptionPane.showMessageDialog(null, "Maaf, fitur ini masih dalam tahap pengembangan..!!");
+        // this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnAdmin11ActionPerformed
 
     /**

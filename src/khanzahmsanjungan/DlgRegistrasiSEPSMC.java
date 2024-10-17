@@ -53,26 +53,27 @@ import org.springframework.http.MediaType;
  * @author Kode
  */
 public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
-    
+
     private final Connection koneksi = koneksiDB.condb();
     private final sekuel Sequel = new sekuel();
     private final validasi Valid = new validasi();
     private final ApiBPJS api = new ApiBPJS();
+    private final DlgCariJadwalDokterBPJS jadwalDokter = new DlgCariJadwalDokterBPJS(null, true);
     private final BPJSCekReferensiDokterDPJP1 dokter = new BPJSCekReferensiDokterDPJP1(null, true);
     private final BPJSCekReferensiPenyakit penyakit = new BPJSCekReferensiPenyakit(null, true);
     private final DlgCariPoliBPJS poli = new DlgCariPoliBPJS(null, true);
     private final BPJSCekRiwayatRujukanTerakhir rujukanTerakhir = new BPJSCekRiwayatRujukanTerakhir(null, true);
     private final BPJSCekRiwayatPelayanan riwayatPelayanan = new BPJSCekRiwayatPelayanan(null, true);
     private final ObjectMapper mapper = new ObjectMapper();
-    
     private final String CARABAYAR = Sequel.cariIsiSmc("select password_asuransi.kd_pj from password_asuransi limit 1"),
         BASENOREG = koneksiDB.BASENOREG(),
-        URUTNOREG = koneksiDB.URUTNOREG().replaceAll("\\s+", ""),
+        URUTNOREG = koneksiDB.URUTNOREG(),
         URLAPIBPJS = koneksiDB.URLAPIBPJS(),
         USERFINGERPRINTBPJS = koneksiDB.USERFINGERPRINTBPJS(),
         PASSFINGERPRINTBPJS = koneksiDB.PASSFINGERPRINTBPJS(),
-        URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS();
-    
+        URLAPLIKASIFINGERPRINTBPJS = koneksiDB.URLAPLIKASIFINGERPRINTBPJS(),
+        URLAPLIKASIFRISTABPJS = koneksiDB.URLAPLIKASIFRISTABPJS();
+
     private String kodeBooking = "",
         jenisKunjungan = "3",
         noReg = "",
@@ -90,6 +91,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         hari = "",
         jamMulai = "",
         jamSelesai = "",
+        jamPraktek = "",
         instansiNama = "",
         instansiKab = "",
         url = "",
@@ -99,7 +101,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         sTglKLL = "",
         dataJam = "",
         utc = "";
-    
+
     private boolean statusfinger = false, aplikasiAktif = false;
 
     private int kuota = -1;
@@ -122,6 +124,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         initComponents();
 
         jumlahBarcode.setDocument(new batasInput((byte) 3).getOnlyAngka(jumlahBarcode));
+        jumlahBarcode.setText("3");
 
         try (ResultSet rs = koneksi.createStatement().executeQuery("select nama_instansi, kabupaten, kode_ppk from setting")) {
             if (rs.next()) {
@@ -181,7 +184,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                     namaPoliBPJS.setText(rujukanTerakhir.getTable().getValueAt(rujukanTerakhir.getTable().getSelectedRow(), 4).toString());
                     kodePPK.setText(rujukanTerakhir.getTable().getValueAt(rujukanTerakhir.getTable().getSelectedRow(), 6).toString());
                     namaPPK.setText(rujukanTerakhir.getTable().getValueAt(rujukanTerakhir.getTable().getSelectedRow(), 7).toString());
-                    Valid.SetTgl(tglRujukan, rujukanTerakhir.getTable().getValueAt(rujukanTerakhir.getTable().getSelectedRow(), 5).toString());
+                    Valid.setTglSmc(tglRujukan, rujukanTerakhir.getTable().getValueAt(rujukanTerakhir.getTable().getSelectedRow(), 5).toString());
                     catatan.requestFocus();
                 }
             }
@@ -198,8 +201,25 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                 noRujukan.requestFocus();
             }
         });
-
-        jumlahBarcode.setText("3");
+        
+        jadwalDokter.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (jadwalDokter.getTable().getSelectedRow() != -1) {
+                    kodeDokterBPJS.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 1).toString());
+                    namaDokterBPJS.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 5).toString());
+                    kodeDokterRS = jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 3).toString();
+                    if (jenisPelayanan.getSelectedIndex() == 1) {
+                        jamPraktek = jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 6).toString();
+                        kuota = Integer.parseInt(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 7).toString());
+                        kodeDPJPLayanan.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 1).toString());
+                        namaDPJPLayanan.setText(jadwalDokter.getTable().getValueAt(jadwalDokter.getTable().getSelectedRow(), 5).toString());
+                    }
+                    pilihDokterBPJS.requestFocus();
+                }
+            }
+            
+        });
     }
 
     /**
@@ -400,7 +420,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         namaPasien.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(192, 192, 223)), javax.swing.BorderFactory.createEmptyBorder(2, 4, 2, 4)));
         namaPasien.setHighlighter(null);
         jPanel2.add(namaPasien);
-        namaPasien.setBounds(340, 10, 230, 30);
+        namaPasien.setBounds(345, 10, 225, 30);
 
         noRM.setEditable(false);
         noRM.setBackground(new java.awt.Color(245, 250, 240));
@@ -425,7 +445,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
         tglSEP.setEditable(false);
         tglSEP.setForeground(new java.awt.Color(50, 70, 50));
-        tglSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "29-09-2024" }));
+        tglSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "06-10-2024" }));
         tglSEP.setDisplayFormat("dd-MM-yyyy");
         tglSEP.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         tglSEP.setOpaque(false);
@@ -442,7 +462,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
         tglRujukan.setEditable(false);
         tglRujukan.setForeground(new java.awt.Color(50, 70, 50));
-        tglRujukan.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "29-09-2024" }));
+        tglRujukan.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "06-10-2024" }));
         tglRujukan.setDisplayFormat("dd-MM-yyyy");
         tglRujukan.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         tglRujukan.setOpaque(false);
@@ -704,7 +724,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
         tglKLL.setEditable(false);
         tglKLL.setForeground(new java.awt.Color(50, 70, 50));
-        tglKLL.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "29-09-2024" }));
+        tglKLL.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "06-10-2024" }));
         tglKLL.setDisplayFormat("dd-MM-yyyy");
         tglKLL.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         tglKLL.setOpaque(false);
@@ -1100,7 +1120,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         simpan.setForeground(new java.awt.Color(0, 131, 62));
         simpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/konfirmasi.png"))); // NOI18N
         simpan.setMnemonic('S');
-        simpan.setText("Konfirmasi");
+        simpan.setText("KONFIRMASI");
         simpan.setToolTipText("Alt+S");
         simpan.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         simpan.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -1115,7 +1135,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         validasi.setForeground(new java.awt.Color(0, 131, 62));
         validasi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/fingerprint.png"))); // NOI18N
         validasi.setMnemonic('K');
-        validasi.setText("FINGERPRINT BPJS");
+        validasi.setText("VALIDASI KEHADIRAN");
         validasi.setToolTipText("Alt+K");
         validasi.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         validasi.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -1130,7 +1150,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         batal.setForeground(new java.awt.Color(0, 131, 62));
         batal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/reset.png"))); // NOI18N
         batal.setMnemonic('K');
-        batal.setText("Batal");
+        batal.setText("BATAL");
         batal.setToolTipText("Alt+K");
         batal.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         batal.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -1186,8 +1206,8 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
             // cek apabila pasien sudah pernah diregistrasikan sebelumnya
             if (Sequel.cariIntegerSmc(
-                "select count(*) from reg_periksa where reg_periksa.no_rkm_medis = ? and reg_periksa.tgl_registrasi = ? and reg_periksa.kd_poli = ? " +
-                "and reg_periksa.kd_dokter = ? and reg_periksa.kd_pj = ? and reg_periksa.no_rawat != ?", noRM.getText(), Valid.getTglSmc(tglSEP), 
+                "select count(*) from reg_periksa where reg_periksa.no_rkm_medis = ? and reg_periksa.tgl_registrasi = ? and reg_periksa.kd_poli = ? "
+                + "and reg_periksa.kd_dokter = ? and reg_periksa.kd_pj = ? and reg_periksa.no_rawat != ?", noRM.getText(), Valid.getTglSmc(tglSEP),
                 kodePoliRS, kodeDokterRS, CARABAYAR, labelNoRawat.getText()
             ) > 0) {
                 JOptionPane.showMessageDialog(null, "Maaf, Telah terdaftar pemeriksaan hari ini. Mohon konfirmasi ke Bagian Admisi");
@@ -1199,14 +1219,13 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                     } else if (jenisPelayanan.getSelectedIndex() == 1) {
                         if (namaPoliBPJS.getText().toLowerCase().contains("darurat")) {
                             if (Sequel.cariIntegerSmc(
-                                "select count(*) from bridging_sep where bridging_sep.no_kartu = ? and bridging_sep.jnspelayanan = ? " +
-                                "and bridging_sep.tglsep = ? and bridging_sep.nmpolitujuan like '%darurat%'", noPesertaBPJS.getText(),
-                                jenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(tglSEP)) >= 3
-                            ) {
+                                "select count(*) from bridging_sep where bridging_sep.no_kartu = ? and bridging_sep.jnspelayanan = ? "
+                                + "and bridging_sep.tglsep = ? and bridging_sep.nmpolitujuan like '%darurat%'", noPesertaBPJS.getText(),
+                                jenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(tglSEP)) >= 3) {
                                 JOptionPane.showMessageDialog(null, "Maaf, sebelumnya sudah dilakukan 3x pembuatan SEP di jenis pelayanan yang sama..!!");
                             } else {
                                 if ((!kodeDokterRS.equals("")) && (!kodePoliRS.equals(""))) {
-                                    if (koneksiDB.bRaw("ADDANTRIANAPIMOBILEJKN")) {
+                                    if (koneksiDB.ADDANTRIANAPIMOBILEJKN()) {
                                         if (addAntreanOnsite()) {
                                             insertSEP();
                                         }
@@ -1217,14 +1236,13 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                             }
                         } else if (!namaPoliBPJS.getText().toLowerCase().contains("darurat")) {
                             if (Sequel.cariIntegerSmc(
-                                "select count(*) from bridging_sep where bridging_sep.no_kartu = ? and bridging_sep.jnspelayanan = ? " +
-                                "and bridging_sep.tglsep = ? and bridging_sep.nmpolitujuan not like '%darurat%'", noPesertaBPJS.getText(),
-                                jenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(tglSEP)) >= 1
-                            ) {
+                                "select count(*) from bridging_sep where bridging_sep.no_kartu = ? and bridging_sep.jnspelayanan = ? "
+                                + "and bridging_sep.tglsep = ? and bridging_sep.nmpolitujuan not like '%darurat%'", noPesertaBPJS.getText(),
+                                jenisPelayanan.getSelectedItem().toString().substring(0, 1), Valid.getTglSmc(tglSEP)) >= 1) {
                                 JOptionPane.showMessageDialog(null, "Maaf, sebelumnya sudah dilakukan pembuatan SEP di jenis pelayanan yang sama..!!");
                             } else {
                                 if ((!kodeDokterRS.equals("")) && (!kodePoliRS.equals(""))) {
-                                    if (koneksiDB.bRaw("ADDANTRIANAPIMOBILEJKN")) {
+                                    if (koneksiDB.ADDANTRIANAPIMOBILEJKN()) {
                                         if (addAntreanOnsite()) {
                                             insertSEP();
                                         }
@@ -1244,10 +1262,10 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
     }//GEN-LAST:event_simpanActionPerformed
 
     private void pilihDokterBPJSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pilihDokterBPJSActionPerformed
-        dokter.setSize(jPanel1.getWidth() - 75, jPanel1.getHeight() - 75);
-        dokter.setLocationRelativeTo(jPanel1);
-        dokter.carinamadokter(kodePoliBPJS.getText(), namaPoliBPJS.getText());
-        dokter.setVisible(true);
+        jadwalDokter.setSize(jPanel1.getWidth() - 75, jPanel1.getHeight() - 75);
+        jadwalDokter.setLocationRelativeTo(jPanel1);
+        jadwalDokter.tampil(getHari(Sequel.cariIntegerSmc("select dayofweek(?)", Valid.getTglSmc(tglSEP))), kodePoliRS, namaPoliBPJS.getText());
+        jadwalDokter.setVisible(true);
     }//GEN-LAST:event_pilihDokterBPJSActionPerformed
 
     private void tujuanKunjunganItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tujuanKunjunganItemStateChanged
@@ -1770,13 +1788,13 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
         param.put("namars", instansiNama);
         param.put("kotars", instansiKab);
         if (jenisPelayanan.getSelectedIndex() == 0) {
-            Valid.printReport("rptBridgingSEPAPM1.jasper", koneksiDB.PRINTER_REGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
+            Valid.printReport("rptBridgingSEPAPM1.jasper", koneksiDB.PRINTERREGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
             Valid.MyReport("rptBridgingSEPAPM1.jasper", "report", "::[ Cetak SEP Model 4 ]::", param);
         } else {
-            Valid.printReport("rptBridgingSEPAPM2.jasper", koneksiDB.PRINTER_REGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
+            Valid.printReport("rptBridgingSEPAPM2.jasper", koneksiDB.PRINTERREGISTRASI(), "::[ Cetak SEP Model 4 ]::", 1, param);
             Valid.MyReport("rptBridgingSEPAPM2.jasper", "report", "::[ Cetak SEP Model 4 ]::", param);
         }
-        Valid.printReport("rptBarcodeRawatAPM.jasper", koneksiDB.PRINTER_BARCODE(), "::[ Barcode Perawatan ]::", Integer.parseInt(jumlahBarcode.getText().trim()), param);
+        Valid.printReport("rptBarcodeRawatAPM.jasper", koneksiDB.PRINTERBARCODE(), "::[ Barcode Perawatan ]::", Integer.parseInt(jumlahBarcode.getText().trim()), param);
         Valid.MyReport("rptBarcodeRawatAPM.jasper", "report", "::[ Barcode Perawatan ]::", param);
     }
 
@@ -1786,7 +1804,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
             if (lakaLantas.getSelectedIndex() > 0) {
                 sTglKLL = Valid.getTglSmc(tglKLL);
             }
-            
+
             utc = api.getUTCDateTimeAsString();
             headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -1879,7 +1897,7 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                     System.out.println("Tidak dapat mendaftarkan pasien dengan no. rawat " + noRawat);
                     return;
                 }
-                
+
                 Sequel.menyimpanSmc("bridging_sep", null, response.asText(), noRawat, Valid.getTglSmc(tglSEP), Valid.getTglSmc(tglRujukan), noRujukan.getText(),
                     kodePPK.getText(), namaPPK.getText(), kodePPKPelayanan.getText(), namaPPKPelayanan.getText(), jenisPelayanan.getSelectedItem().toString().substring(0, 1),
                     catatan.getText(), kodeDiagnosaBPJS.getText(), namaDiagnosaBPJS.getText(), kodePoliBPJS.getText(), namaPoliBPJS.getText(), kelas.getSelectedItem().toString().substring(0, 1),
@@ -1969,12 +1987,12 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
     public void tampilKodeBookingMobileJKN(String noBooking) {
         try (PreparedStatement psjkn = koneksi.prepareStatement(
-            "select referensi_mobilejkn_bpjs.*, maping_poli_bpjs.nm_poli_bpjs, maping_poli_bpjs.kd_poli_rs, maping_dokter_dpjpvclaim.nm_dokter_bpjs, " +
-            "maping_dokter_dpjpvclaim.kd_dokter from referensi_mobilejkn_bpjs join maping_poli_bpjs on referensi_mobilejkn_bpjs.kodepoli = " +
-            "maping_poli_bpjs.kd_poli_bpjs join maping_dokter_dpjpvclaim on referensi_mobilejkn_bpjs.kodedokter = maping_dokter_dpjpvclaim.kd_dokter_bpjs " +
-            "where referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn_bpjs.tanggalperiksa = current_date() and " +
-            "referensi_mobilejkn_bpjs.status in ('Belum', 'Checkin') and not exists(select * from pemeriksaan_ralan where " +
-            "pemeriksaan_ralan.no_rawat = referensi_mobilejkn_bpjs.no_rawat)"
+            "select referensi_mobilejkn_bpjs.*, maping_poli_bpjs.nm_poli_bpjs, maping_poli_bpjs.kd_poli_rs, maping_dokter_dpjpvclaim.nm_dokter_bpjs, "
+            + "maping_dokter_dpjpvclaim.kd_dokter from referensi_mobilejkn_bpjs join maping_poli_bpjs on referensi_mobilejkn_bpjs.kodepoli = "
+            + "maping_poli_bpjs.kd_poli_bpjs join maping_dokter_dpjpvclaim on referensi_mobilejkn_bpjs.kodedokter = maping_dokter_dpjpvclaim.kd_dokter_bpjs "
+            + "where referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn_bpjs.tanggalperiksa = current_date() and "
+            + "referensi_mobilejkn_bpjs.status in ('Belum', 'Checkin') and not exists(select * from pemeriksaan_ralan where "
+            + "pemeriksaan_ralan.no_rawat = referensi_mobilejkn_bpjs.no_rawat)"
         )) {
             psjkn.setString(1, noBooking);
             try (ResultSet rsjkn = psjkn.executeQuery()) {
@@ -2015,10 +2033,17 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                         if (metadata.path("code").asText().equals("200")) {
                             response = mapper.readTree(api.Decrypt(root.path("response").asText(), utc)).path("peserta");
                             switch (response.path("hakKelas").path("kode").asText()) {
-                                case "1": kelas.setSelectedIndex(0); break;
-                                case "2": kelas.setSelectedIndex(1); break;
-                                case "3": kelas.setSelectedIndex(2); break;
-                                default: break;
+                                case "1":
+                                    kelas.setSelectedIndex(0);
+                                    break;
+                                case "2":
+                                    kelas.setSelectedIndex(1);
+                                    break;
+                                case "3":
+                                    kelas.setSelectedIndex(2);
+                                    break;
+                                default:
+                                    break;
                             }
                             prb = response.path("informasi").path("prolanisPRB").asText();
                             if (prb.contains("null")) {
@@ -2104,8 +2129,8 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                             } else if (jenisKunjungan.equals("3")) {
                                 // CEK JENIS KONTROL DULU
                                 try (PreparedStatement pskontrol = koneksi.prepareStatement(
-                                    "select bridging_surat_kontrol_bpjs.*, left(bridging_sep.asal_rujukan, 1) as asal_rujukan, bridging_sep.jnspelayanan, bridging_sep.no_rujukan, bridging_sep.klsrawat " +
-                                    "from bridging_surat_kontrol_bpjs join bridging_sep on bridging_surat_kontrol_bpjs.no_sep = bridging_sep.no_sep where bridging_surat_kontrol_bpjs.no_surat = ?"
+                                    "select bridging_surat_kontrol_bpjs.*, left(bridging_sep.asal_rujukan, 1) as asal_rujukan, bridging_sep.jnspelayanan, bridging_sep.no_rujukan, bridging_sep.klsrawat "
+                                    + "from bridging_surat_kontrol_bpjs join bridging_sep on bridging_surat_kontrol_bpjs.no_sep = bridging_sep.no_sep where bridging_surat_kontrol_bpjs.no_surat = ?"
                                 )) {
                                     pskontrol.setString(1, rsjkn.getString("nomorreferensi"));
                                     try (ResultSet rskontrol = pskontrol.executeQuery()) {
@@ -2215,10 +2240,10 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
 
     public void tampilNoKartuMobileJKN(String noKartu) {
         try (PreparedStatement psjkn = koneksi.prepareStatement(
-            "select referensi_mobilejkn_bpjs.*, maping_poli_bpjs.nm_poli_bpjs, maping_poli_bpjs.kd_poli_rs, maping_dokter_dpjpvclaim.nm_dokter_bpjs, maping_dokter_dpjpvclaim.kd_dokter from referensi_mobilejkn_bpjs " +
-            "join maping_poli_bpjs on referensi_mobilejkn_bpjs.kodepoli = maping_poli_bpjs.kd_poli_bpjs join maping_dokter_dpjpvclaim on referensi_mobilejkn_bpjs.kodedokter = maping_dokter_dpjpvclaim.kd_dokter_bpjs " +
-            "where referensi_mobilejkn_bpjs.nomorkartu = ? and referensi_mobilejkn_bpjs.tanggalperiksa = current_date() and referensi_mobilejkn_bpjs.status in ('Belum', 'Checkin') and not exists(select * from " +
-            "pemeriksaan_ralan where pemeriksaan_ralan.no_rawat = referensi_mobilejkn_bpjs.no_rawat)"
+            "select referensi_mobilejkn_bpjs.*, maping_poli_bpjs.nm_poli_bpjs, maping_poli_bpjs.kd_poli_rs, maping_dokter_dpjpvclaim.nm_dokter_bpjs, maping_dokter_dpjpvclaim.kd_dokter from referensi_mobilejkn_bpjs "
+            + "join maping_poli_bpjs on referensi_mobilejkn_bpjs.kodepoli = maping_poli_bpjs.kd_poli_bpjs join maping_dokter_dpjpvclaim on referensi_mobilejkn_bpjs.kodedokter = maping_dokter_dpjpvclaim.kd_dokter_bpjs "
+            + "where referensi_mobilejkn_bpjs.nomorkartu = ? and referensi_mobilejkn_bpjs.tanggalperiksa = current_date() and referensi_mobilejkn_bpjs.status in ('Belum', 'Checkin') and not exists(select * from "
+            + "pemeriksaan_ralan where pemeriksaan_ralan.no_rawat = referensi_mobilejkn_bpjs.no_rawat)"
         )) {
             psjkn.setString(1, noKartu);
             try (ResultSet rsjkn = psjkn.executeQuery()) {
@@ -2259,10 +2284,17 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                         if (metadata.path("code").asText().equals("200")) {
                             response = mapper.readTree(api.Decrypt(root.path("response").asText(), utc)).path("peserta");
                             switch (response.path("hakKelas").path("kode").asText()) {
-                                case "1": kelas.setSelectedIndex(0); break;
-                                case "2": kelas.setSelectedIndex(1); break;
-                                case "3": kelas.setSelectedIndex(2); break;
-                                default: break;
+                                case "1":
+                                    kelas.setSelectedIndex(0);
+                                    break;
+                                case "2":
+                                    kelas.setSelectedIndex(1);
+                                    break;
+                                case "3":
+                                    kelas.setSelectedIndex(2);
+                                    break;
+                                default:
+                                    break;
                             }
                             prb = response.path("informasi").path("prolanisPRB").asText();
                             if (prb.contains("null")) {
@@ -2348,8 +2380,8 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
                             } else if (jenisKunjungan.equals("3")) {
                                 // CEK JENIS KONTROL DULU
                                 try (PreparedStatement pskontrol = koneksi.prepareStatement(
-                                    "select bridging_surat_kontrol_bpjs.*, left(bridging_sep.asal_rujukan, 1) as asal_rujukan, bridging_sep.jnspelayanan, bridging_sep.no_rujukan, bridging_sep.klsrawat " +
-                                    "from bridging_surat_kontrol_bpjs join bridging_sep on bridging_surat_kontrol_bpjs.no_sep = bridging_sep.no_sep where bridging_surat_kontrol_bpjs.no_surat = ?"
+                                    "select bridging_surat_kontrol_bpjs.*, left(bridging_sep.asal_rujukan, 1) as asal_rujukan, bridging_sep.jnspelayanan, bridging_sep.no_rujukan, bridging_sep.klsrawat "
+                                    + "from bridging_surat_kontrol_bpjs join bridging_sep on bridging_surat_kontrol_bpjs.no_sep = bridging_sep.no_sep where bridging_surat_kontrol_bpjs.no_surat = ?"
                                 )) {
                                     pskontrol.setString(1, rsjkn.getString("nomorreferensi"));
                                     try (ResultSet rskontrol = pskontrol.executeQuery()) {
@@ -3018,17 +3050,17 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
     private boolean addAntreanOnsite() {
         String code = "200", pesan = "";
         boolean output = true;
-        
+
         if (!kodeBooking.equals("")) {
             if (Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn_bpjs.status = 'Belum'", kodeBooking)) {
                 Sequel.mengupdateSmc("referensi_mobilejkn_bpjs", "referensi_mobilejkn_bpjs.validasi = now(), referensi_mobilejkn_bpjs.status = 'Checkin'", "referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn_bpjs.status = 'Belum'", kodeBooking);
                 Sequel.mengupdateSmc("reg_periksa", "reg_periksa.jam_reg = current_time()", "reg_periksa.no_rawat = ? and stts != 'Batal'", noRawat);
             }
             try (PreparedStatement ps = koneksi.prepareStatement(
-                "select referensi_mobilejkn_bpjs.*, reg_periksa.no_rkm_medis, pasien.nm_pasien, poliklinik.nm_poli, dokter.nm_dokter from referensi_mobilejkn_bpjs " +
-                "join reg_periksa on referensi_mobilejkn_bpjs.no_rawat = reg_periksa.no_rawat join pasien on reg_periksa.no_rkm_medis = pasien.no_rkm_medis " +
-                "join poliklinik on reg_periksa.kd_poli = poliklinik.kd_poli join dokter on reg_periksa.kd_dokter = dokter.kd_dokter " +
-                "where referensi_mobilejkn_bpjs.statuskirim = 'Belum' and referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn.status = 'Checkin'"
+                "select referensi_mobilejkn_bpjs.*, reg_periksa.no_rkm_medis, pasien.nm_pasien, poliklinik.nm_poli, dokter.nm_dokter from referensi_mobilejkn_bpjs "
+                + "join reg_periksa on referensi_mobilejkn_bpjs.no_rawat = reg_periksa.no_rawat join pasien on reg_periksa.no_rkm_medis = pasien.no_rkm_medis "
+                + "join poliklinik on reg_periksa.kd_poli = poliklinik.kd_poli join dokter on reg_periksa.kd_dokter = dokter.kd_dokter "
+                + "where referensi_mobilejkn_bpjs.statuskirim = 'Belum' and referensi_mobilejkn_bpjs.nobooking = ? and referensi_mobilejkn.status = 'Checkin'"
             )) {
                 ps.setString(1, kodeBooking);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -3528,6 +3560,19 @@ public class DlgRegistrasiSEPSMC extends javax.swing.JDialog {
             "no_rkm_medis = ?",
             noTelp.getText(), nik.getText(), noRM.getText()
         );
+    }
+    
+    private String getHari(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case 1: return "AKHAD";
+            case 2: return "SENIN";
+            case 3: return "SELASA";
+            case 4: return "RABU";
+            case 5: return "KAMIS";
+            case 6: return "JUMAT";
+            case 7: return "SABTU";
+            default: return "";
+        }
     }
 
     private void resetAksi() {
