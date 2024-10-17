@@ -196,7 +196,7 @@ public final class sekuel {
     public boolean cariBooleanSmc(String sql, String... values) {
         boolean output = false;
 
-        try (PreparedStatement ps = koneksi.prepareStatement(sql)) {
+        try (PreparedStatement ps = koneksi.prepareStatement("select exists(" + sql + ")")) {
             for (int i = 0; i < values.length; i++) {
                 ps.setString(i + 1, values[i]);
             }

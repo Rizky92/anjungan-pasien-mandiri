@@ -214,7 +214,6 @@ public final class validasi {
 
             PrintRequestAttributeSet pra = new HashPrintRequestAttributeSet();
             pra.add(new Copies(jumlah));
-
             SimplePrintServiceExporterConfiguration config = new SimplePrintServiceExporterConfiguration();
 
             config.setPrintService(printService);

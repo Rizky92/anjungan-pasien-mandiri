@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 public class DlgCekinMobileJKN extends javax.swing.JDialog {
 
     private final sekuel Sequel = new sekuel();
-    private final DlgRegistrasiSEPMobileJKN form = new DlgRegistrasiSEPMobileJKN(null, false);
+    private final DlgRegistrasiSEPSMC form = new DlgRegistrasiSEPSMC(null, false);
 
     /**
      * Creates new form DlgAdmin
@@ -383,14 +383,14 @@ public class DlgCekinMobileJKN extends javax.swing.JDialog {
             }
 
             if (Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where nomorkartu = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText())) {
-                form.tampil(NoRMPasien.getText());
+                form.tampilNoKartuMobileJKN(NoRMPasien.getText());
                 form.setSize(this.getWidth(), this.getHeight());
                 form.setLocationRelativeTo(jPanel1);
                 form.setVisible(true);
                 this.dispose();
                 this.setCursor(Cursor.getDefaultCursor());
             } else if (Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText())) {
-                form.tampil(Sequel.cariIsi("select nomorkartu from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
+                form.tampilNoKartuMobileJKN(Sequel.cariIsi("select nomorkartu from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
                 form.setSize(this.getWidth(), this.getHeight());
                 form.setLocationRelativeTo(jPanel1);
                 form.setVisible(true);
@@ -416,20 +416,23 @@ public class DlgCekinMobileJKN extends javax.swing.JDialog {
         }
 
         if (Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where nomorkartu = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText())) {
-            form.tampil(NoRMPasien.getText());
+            System.out.println("Notif nomorkartu : " + Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where nomorkartu = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
+            form.tampilNoKartuMobileJKN(NoRMPasien.getText());
             form.setSize(this.getWidth(), this.getHeight());
             form.setLocationRelativeTo(jPanel1);
             form.setVisible(true);
             this.dispose();
             this.setCursor(Cursor.getDefaultCursor());
         } else if (Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText())) {
-            form.tampil(Sequel.cariIsi("select nomorkartu from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
+            form.tampilNoKartuMobileJKN(Sequel.cariIsi("select nomorkartu from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
             form.setSize(this.getWidth(), this.getHeight());
             form.setLocationRelativeTo(jPanel1);
             form.setVisible(true);
             this.dispose();
             this.setCursor(Cursor.getDefaultCursor());
         } else {
+            System.out.println("Notif nomorkartu : " + Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where nomorkartu = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
+            System.out.println("Notif norm : " + Sequel.cariBooleanSmc("select * from referensi_mobilejkn_bpjs where norm = ? and tanggalperiksa = current_date() and status != 'Batal'", NoRMPasien.getText()));
             JOptionPane.showMessageDialog(rootPane, "Data Booking MobileJKN tidak ditemukan. ");
             this.setCursor(Cursor.getDefaultCursor());
         }
